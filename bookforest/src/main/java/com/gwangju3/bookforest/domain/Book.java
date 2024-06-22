@@ -4,15 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@AllArgsConstructor
 public class Book {
 
-    @Id @GeneratedValue
+    @Id
     @Column(name = "book_id")
     private Long id;
 
@@ -29,4 +33,23 @@ public class Book {
     private Integer bestRank;
 
     private Integer page;
+
+    protected Book() {
+
+    }
+
+    // 나중에 꼭 지워야 됨
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", pubdate=" + pubdate +
+                ", description='" + description + '\'' +
+                ", coverUrl='" + coverUrl + '\'' +
+                ", bestRank=" + bestRank +
+                ", page=" + page +
+                '}';
+    }
 }
