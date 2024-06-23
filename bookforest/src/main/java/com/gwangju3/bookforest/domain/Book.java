@@ -1,12 +1,16 @@
 package com.gwangju3.bookforest.domain;
 
+import com.gwangju3.bookforest.domain.like.BookLike;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +33,11 @@ public class Book {
     private Integer bestRank;
 
     private Integer page;
+
+    // TODO: QuickReview, BookLike 목록
+    @OneToMany(mappedBy = "book")
+    private List<QuickReview> quickReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book")
+    private List<BookLike> bookLikes = new ArrayList<>();
 }
