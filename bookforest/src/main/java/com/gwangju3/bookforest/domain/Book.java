@@ -23,7 +23,7 @@ public class Book {
 
     private String author;
 
-    private LocalDate pubdate;
+    private LocalDate pubDate;
 
     private String description;
 
@@ -37,11 +37,11 @@ public class Book {
 
     }
 
-    public Book(Long id, String title, String author, LocalDate pubdate, String description, String coverUrl, Integer bestRank, Integer page) {
+    public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer bestRank, Integer page) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.pubdate = pubdate;
+        this.pubDate = pubDate;
         this.description = description;
         this.coverUrl = coverUrl;
         this.bestRank = bestRank;
