@@ -3,14 +3,9 @@ package com.gwangju3.bookforest.domain;
 import com.gwangju3.bookforest.domain.like.BookLike;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.OneToMany;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
 public class Book {
 
     @Id
@@ -29,7 +23,7 @@ public class Book {
 
     private String author;
 
-    private LocalDate pubdate;
+    private LocalDate pubDate;
 
     private String description;
 
@@ -39,19 +33,19 @@ public class Book {
 
     private Integer page;
 
-    public Book(Long id, String title, String author, LocalDate pubdate, String description, String coverUrl, Integer bestRank, Integer page) {
+    protected Book() {
+
+    }
+
+    public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer bestRank, Integer page) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.pubdate = pubdate;
+        this.pubDate = pubDate;
         this.description = description;
         this.coverUrl = coverUrl;
         this.bestRank = bestRank;
         this.page = page;
-    }
-
-    public Book() {
-
     }
 
     // TODO: QuickReview, BookLike 목록
