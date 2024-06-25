@@ -52,5 +52,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookReview> BookReviews = new ArrayList<>();
 
-    // TODO commit, like 목록
+    public User(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    protected User() {
+
+    }
+// TODO commit, like 목록
 }
