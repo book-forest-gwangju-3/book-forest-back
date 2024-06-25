@@ -39,6 +39,21 @@ public class Book {
 
     private Integer page;
 
+    public Book(Long id, String title, String author, LocalDate pubdate, String description, String coverUrl, Integer bestRank, Integer page) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.pubdate = pubdate;
+        this.description = description;
+        this.coverUrl = coverUrl;
+        this.bestRank = bestRank;
+        this.page = page;
+    }
+
+    public Book() {
+
+    }
+
     // TODO: QuickReview, BookLike 목록
     @OneToMany(mappedBy = "book")
     private List<QuickReview> quickReviews = new ArrayList<>();
