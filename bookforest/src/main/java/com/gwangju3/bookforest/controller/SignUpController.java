@@ -6,6 +6,7 @@ import com.gwangju3.bookforest.service.SignUpService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,5 +23,10 @@ public class SignUpController {
     public String signUp(@RequestBody @Valid CreateUserRequest request) {
         signUpService.signUp(request);
         return "Welcome";
+    }
+
+    @GetMapping("/example")
+    public String example() {
+        return "example";
     }
 }

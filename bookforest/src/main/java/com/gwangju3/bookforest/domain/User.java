@@ -28,6 +28,7 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
