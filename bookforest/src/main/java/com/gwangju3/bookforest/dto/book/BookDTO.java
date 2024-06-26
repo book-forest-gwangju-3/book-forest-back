@@ -30,20 +30,4 @@ public class BookDTO {
     private String publisher;
 
     private String categoryName;
-
-    public static BookDTO bookEntityToDTO(Book book) {
-        return new BookDTO(
-            book.getId(),
-            book.getTitle(),
-            book.getAuthor(),
-            book.getPubDate(),
-            book.getDescription(),
-            book.getCoverUrl(),
-            book.getBestRank(),
-            book.getPage(),
-            book.getStandardPrice(),
-            book.getPublisher(),
-            book.getCategoryName()
-        );
-    }
 }
