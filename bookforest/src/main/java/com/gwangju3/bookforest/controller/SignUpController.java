@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,8 +20,9 @@ public class SignUpController {
     private final SignUpService signUpService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/signup")
+    @PostMapping("/user/signup")
     public String signUp(@RequestBody @Valid CreateUserRequest request) {
+        System.out.println(request.getUsername());
         signUpService.signUp(request);
         return "Welcome";
     }
