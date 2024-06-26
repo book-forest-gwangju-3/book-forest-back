@@ -48,6 +48,7 @@ public class BookService {
     public MyBook updateMyBook(long bookId, Integer page) {
         MyBook mybook = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId).get(0);
         mybook.setLastReadPage(page);
+
         return mybook;
     }
 
