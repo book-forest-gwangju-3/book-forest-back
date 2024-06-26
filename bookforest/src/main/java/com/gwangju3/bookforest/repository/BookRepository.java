@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookRepository {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     public List<Book> findAll() {
         return em.createQuery("select b from Book b", Book.class)
