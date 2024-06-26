@@ -28,7 +28,6 @@ public class MyBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @Setter
     private Integer lastReadPage;
 
     private Boolean readCompleted;
@@ -43,5 +42,11 @@ public class MyBook {
     public void setUser(User user) {
         this.user = user;
         getUser().getMyBooks().add(this);
+    }
+
+    public void setLastReadPage(Integer page) {
+        // 마지막 페이지보다 작으면 업데이트 못하게 막기
+        // 최대 페이지 보다 크게 못하게 하기
+        this.lastReadPage = page;
     }
 }
