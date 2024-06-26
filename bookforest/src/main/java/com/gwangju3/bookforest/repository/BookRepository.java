@@ -17,7 +17,7 @@ public class BookRepository {
         em.persist(myBook);
     }
 
-    public Book findOneBook(Long bookId) {
+    public Book findBookById(Long bookId) {
         return em.find(Book.class, bookId);
     }
 

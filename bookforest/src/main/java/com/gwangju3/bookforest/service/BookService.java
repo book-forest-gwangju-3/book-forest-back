@@ -29,7 +29,7 @@ public class BookService {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-        Book book = bookRepository.findOneBook(bookId);
+        Book book = bookRepository.findBookById(bookId);
         MyBook myBook = new MyBook(0, false);
 
         bookRepository.saveMyBook(myBook);
