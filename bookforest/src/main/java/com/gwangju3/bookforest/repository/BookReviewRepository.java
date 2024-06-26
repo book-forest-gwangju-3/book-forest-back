@@ -17,7 +17,14 @@ public class BookReviewRepository {
     }
 
     public List<BookReview> findAll() {
-        return em.createQuery("select b from BookReview b", BookReview.class)
+        return em.createQuery("select br from BookReview br"
+                                + " join fetch br.user u"
+                                + " join fetch br.book b", BookReview.class)
                 .getResultList();
+
+    }
+
+    public void save(BookReview bookReview) {
+        em.persist(bookReview);
     }
 }
