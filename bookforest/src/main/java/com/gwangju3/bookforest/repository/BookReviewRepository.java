@@ -12,6 +12,10 @@ import java.util.List;
 public class BookReviewRepository {
     private final EntityManager em;
 
+    public BookReview findBookReviewById(Long id) {
+        return em.find(BookReview.class, id);
+    }
+
     public List<BookReview> findAll() {
         return em.createQuery("select b from BookReview b", BookReview.class)
                 .getResultList();

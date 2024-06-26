@@ -18,4 +18,8 @@ public class BookReviewService {
     public List<BookReview> findAll() {
         return bookReviewRepository.findAll();
     }
+
+    public BookReview findBook(Long id) {
+        return bookReviewRepository.findBookReviewById(id);
+    }
 }

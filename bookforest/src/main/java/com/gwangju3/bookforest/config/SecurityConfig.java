@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -64,7 +63,8 @@ public class SecurityConfig {
                                 "/user/signup",
                                 "/initdb/*",
                                 "/books",
-                                "/book-reviews"
+                                "/book-reviews",
+                                "/book-reviews/*"
                         ).permitAll()
                         .anyRequest().authenticated());
 
