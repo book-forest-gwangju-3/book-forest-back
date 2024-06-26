@@ -3,6 +3,7 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
+import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.BookDTO;
 import com.gwangju3.bookforest.dto.book.MyBookDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
@@ -13,6 +14,7 @@ import com.gwangju3.bookforest.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,12 +51,17 @@ public class BookController {
 
     // 독서 페이지 기록 (MyBook 엔티티의 lastReadPage 수정)
     @PatchMapping("/books/{bookId}/read")
-    public MyBookDTO updateMyBook(
+    public ResponseEntity<?> updateMyBook(
             @PathVariable("bookId") String bookId,
             @RequestBody @Valid UpdateMyBookRequest request
     ) {
         MyBook myBook = bookService.updateMyBook(Long.parseLong(bookId), request.getPage());
-        return MyBookMapper.entityToDTO(myBook);
+        if (myBook != null) {
+            return new ResponseEntity<>(MyBookMapper.entityToDTO(myBook), HttpStatus.OK);
+        } else {
+            MessageResponse message = new MessageResponse("입력할 페이지의 수는 책의 마지막 페이지보다 작고, 마지막 읽었던 페이지보다 많아야 합니다.");
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

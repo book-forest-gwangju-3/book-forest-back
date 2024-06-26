@@ -44,9 +44,15 @@ public class MyBook {
         getUser().getMyBooks().add(this);
     }
 
-    public void setLastReadPage(Integer page) {
-        // 마지막 페이지보다 작으면 업데이트 못하게 막기
-        // 최대 페이지 보다 크게 못하게 하기
-        this.lastReadPage = page;
+    public boolean setLastReadPage(Integer page) {
+        if (page > getBook().getPage() || page <= getLastReadPage()) {
+            return false;
+        } else {
+            if (page.equals(getBook().getPage())) {
+                this.readCompleted = true;
+            }
+            this.lastReadPage = page;
+            return true;
+        }
     }
 }
