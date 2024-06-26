@@ -31,6 +31,7 @@ public class BookService {
 
         Book book = bookRepository.findBookById(bookId);
         MyBook myBook = new MyBook(0, false);
+        myBook.setBook(book);
 
         bookRepository.saveMyBook(myBook);
         return myBook;
