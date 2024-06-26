@@ -30,7 +30,6 @@ public class InitDBRepository {
             for (int j = 0; j < bestSellerArray.length(); j++) {
                 JSONObject o = bestSellerArray.getJSONObject(j);
                 Long id = o.getLong("itemId");
-                System.out.println(id);
                 String title = o.getString("title");
                 String author = o.getString("author").split(" \\(")[0];
 
@@ -38,17 +37,20 @@ public class InitDBRepository {
                 String description = o.getString("description");
                 String coverUrl = o.getString("cover");
                 Integer bestRank = o.getInt("bestRank");
+                Integer standardPrice = o.getInt("priceStandard");
+                String publisher = o.getString("publisher");
+                String categoryName = o.getString("categoryName");
 
                 String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=ttbchakkerly1400002&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
                 JSONObject detailObj = parseJson(newUrl).getJSONObject(0);
                 JSONObject subInfo = detailObj.getJSONObject("subInfo");
                 Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, bestRank, page);
+                Book book = new Book(id, title, author, pubDate, description, coverUrl, bestRank, page, standardPrice, publisher, categoryName);
                 em.persist(book);
             }
         }
 
-        return "success";
+        return numOfPages + " page(s) saved";
     }
 
     private static JSONArray parseJson(String givenUrl) throws IOException {

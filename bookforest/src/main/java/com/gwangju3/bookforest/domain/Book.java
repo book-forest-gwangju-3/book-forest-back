@@ -33,11 +33,17 @@ public class Book {
 
     private Integer page;
 
+    private Integer standardPrice;
+
+    private String publisher;
+
+    private String categoryName;
+
     protected Book() {
 
     }
 
-    public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer bestRank, Integer page) {
+    public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer bestRank, Integer page, Integer standardPrice, String publisher, String categoryName) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -46,6 +52,9 @@ public class Book {
         this.coverUrl = coverUrl;
         this.bestRank = bestRank;
         this.page = page;
+        this.standardPrice = standardPrice;
+        this.publisher = publisher;
+        this.categoryName = categoryName;
     }
 
     // TODO: QuickReview, BookLike 목록
