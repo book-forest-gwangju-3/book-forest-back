@@ -63,7 +63,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/user/signup",
                                 "/initdb/*",
-                                "/books"
+                                "/books",
+                                "/book-reviews"
                         ).permitAll()
                         .anyRequest().authenticated());
 
