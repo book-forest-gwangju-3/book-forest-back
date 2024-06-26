@@ -48,7 +48,7 @@ public class BookController {
 
 
     // 독서 페이지 기록 (MyBook 엔티티의 lastReadPage 수정)
-    @PostMapping("/books/{bookId}/read")
+    @PatchMapping("/books/{bookId}/read")
     public MyBookDTO updateMyBook(
             @PathVariable("bookId") String bookId,
             @RequestBody @Valid UpdateMyBookRequest request

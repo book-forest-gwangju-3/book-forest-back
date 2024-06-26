@@ -37,7 +37,7 @@ public class BookRepository {
     public List<MyBook> findMyBookByUserBook(String username, Long bookId) {
         return em.createQuery(
                         "select m from MyBook m"
-                                + " where m.username = :username"
+                                + " where m.user.username = :username"
                                 + " and m.book.id = :bookId"
                         , MyBook.class)
                 .setParameter("username", username)
