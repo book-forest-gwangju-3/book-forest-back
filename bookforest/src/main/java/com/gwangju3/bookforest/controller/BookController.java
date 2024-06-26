@@ -1,13 +1,16 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.Book;
+import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.book.BookDTO;
+import com.gwangju3.bookforest.dto.book.MyBookDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
+import com.gwangju3.bookforest.mapper.BookMapper;
+import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +28,7 @@ public class BookController {
         List<Book> allBooks = bookService.findAllBooks();
 
         List<BookDTO> items = allBooks.stream()
-                .map(BookDTO::bookEntityToDTO)
+                .map(BookMapper::entityToDTO)
                 .collect(Collectors.toList());
 
         return new ReadBookListResponse(items);
@@ -33,9 +36,11 @@ public class BookController {
 
 
     // 독서 시작 (MyBook 엔티티 생성)
-//    @PostMapping("/books/{bookId}/start")
-//    public String createMyBook() {
-//        bookService.createMyBook();
-//    }
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/books/{bookId}/start")
+    public MyBookDTO createMyBook(@PathVariable("bookId") String bookId) {
+        MyBook myBook = bookService.createMyBook(Long.parseLong(bookId));
+        return MyBookMapper.entityToDTO(myBook);
+    }
 
 }

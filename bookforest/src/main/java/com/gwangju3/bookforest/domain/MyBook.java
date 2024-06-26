@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -22,13 +23,24 @@ public class MyBook {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
     private Integer lastReadPage;
 
-    private boolean readCompleted;
+    private Boolean readCompleted;
 
+    protected MyBook() { }
 
+    public MyBook(Integer lastReadPage, boolean readCompleted) {
+        this.lastReadPage = lastReadPage;
+        this.readCompleted = readCompleted;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        getUser().getMyBooks().add(this);
+    }
 }
