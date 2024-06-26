@@ -6,8 +6,8 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,10 +22,11 @@ public class InitDBController {
 
     private final InitDBRepository initDBRepository;
 
-    @GetMapping("/initdb")
-    public String initDB() throws IOException {
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/initdb/{page}")
+    public String initDB(@PathVariable("page") String page) throws IOException {
         // 1페이지당 책 50개 저장
         // 최대 20페이지까지 가능 (최대 1000개)
-        return initDBRepository.initDB(20);
+        return initDBRepository.initDB(Integer.parseInt(page));
     }
 }
