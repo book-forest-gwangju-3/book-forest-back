@@ -22,7 +22,6 @@ public class SignUpController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/user/signup")
     public String signUp(@RequestBody @Valid CreateUserRequest request) {
-        System.out.println(request.getUsername());
         signUpService.signUp(request);
         return "Welcome";
     }

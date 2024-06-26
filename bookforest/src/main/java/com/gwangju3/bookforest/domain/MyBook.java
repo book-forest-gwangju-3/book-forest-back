@@ -28,6 +28,7 @@ public class MyBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Setter
     private Integer lastReadPage;
 
     private Boolean readCompleted;
