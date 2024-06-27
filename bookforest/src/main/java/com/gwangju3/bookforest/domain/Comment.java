@@ -38,6 +38,10 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+
+    protected Comment() {
+    }
+
     public Comment(User user, String content) {
         this.user = user;
         this.content = content;
