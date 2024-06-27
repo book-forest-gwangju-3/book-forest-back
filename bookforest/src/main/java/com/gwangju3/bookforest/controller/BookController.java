@@ -26,6 +26,10 @@ public class BookController {
     private final BookService bookService;
 
 
+    /*
+    * 책 조회
+    * */
+
     // 책 전체 목록 조회
     @GetMapping("/")
     public ReadBookListResponse books() {
@@ -37,6 +41,12 @@ public class BookController {
 
         return new ReadBookListResponse(items);
     }
+
+
+
+    /*
+     * 독서 (MyBook)
+     * */
 
 
     // 독서 시작 (MyBook 엔티티 생성)
@@ -62,6 +72,12 @@ public class BookController {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
     }
+
+
+
+    /*
+     * 한줄평
+     * */
 
 
     // 한줄평 생성
