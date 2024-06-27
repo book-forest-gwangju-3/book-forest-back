@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +21,20 @@ import java.time.LocalDate;
 @Repository
 @RequiredArgsConstructor
 public class InitDBRepository {
+    @Value("${ALADIN_API_KEY}")
+    private String ALADIN_API_KEY;
 
     private final EntityManager em;
+    private final BookRepository bookRepository;
 
     public String initDB(int numOfPages) throws IOException {
         for (int i = 1; i <= numOfPages; i++) {
-            String url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbchakkerly1400002&QueryType=Bestseller&MaxResults=50&start="+ i + "&SearchTarget=Book&output=js&Version=20131101";
+            String url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=" + ALADIN_API_KEY + "&QueryType=Bestseller&MaxResults=50&start="+ i + "&SearchTarget=Book&output=js&Version=20131101";
             JSONArray bestSellerArray = parseJson(url);
             for (int j = 0; j < bestSellerArray.length(); j++) {
                 JSONObject o = bestSellerArray.getJSONObject(j);
                 Long id = o.getLong("itemId");
+                if (bookRepository.findBookById(id) != null) continue;
                 String title = o.getString("title");
                 String author = o.getString("author").split(" \\(")[0];
 
