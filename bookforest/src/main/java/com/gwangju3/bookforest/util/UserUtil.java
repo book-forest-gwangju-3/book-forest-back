@@ -7,7 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserUtil {
     public static String extractUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.getUsername();
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            return userDetails.getUsername();
+        } else {
+            return null;
+        }
     }
 }

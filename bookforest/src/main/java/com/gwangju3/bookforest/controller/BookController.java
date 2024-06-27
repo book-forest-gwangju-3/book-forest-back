@@ -5,10 +5,12 @@ import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
+import com.gwangju3.bookforest.mapper.BookDetailMapper;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.mapper.QuickReviewMapper;
 import com.gwangju3.bookforest.service.BookService;
+import com.gwangju3.bookforest.util.UserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,7 @@ public class BookController {
     // 책 전체 목록 조회
     @GetMapping("/")
     public ReadBookListResponse books() {
-        List<Book> allBooks = bookService.findAllBooks();
+        List<Book> allBooks = bookService.findAllBook();
 
         List<BookDTO> items = allBooks.stream()
                 .map(BookMapper::entityToDTO)
@@ -43,6 +45,14 @@ public class BookController {
     }
 
 
+    // 책 상세 조회
+    @GetMapping("/{bookId}")
+    public ReadBookDetailResponse book(@PathVariable("bookId") String bookId) {
+        Book book = bookService.findBookById(Long.parseLong(bookId));
+        MyBook myBook = bookService.findMyBookByUserBook(Long.parseLong(bookId));
+
+        return BookDetailMapper.entityToDTO(book, myBook);
+    }
 
     /*
      * 독서 (MyBook)

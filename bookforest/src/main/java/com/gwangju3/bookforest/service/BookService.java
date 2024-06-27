@@ -24,8 +24,24 @@ public class BookService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<Book> findAllBooks() {
+    public Book findBookById(Long bookId) {
+        return bookRepository.findBookById(bookId);
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<Book> findAllBook() {
         return bookRepository.findAllBook();
+    }
+
+    public MyBook findMyBookByUserBook(Long bookId) {
+        List<MyBook> myBookList = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId);
+        // 비로그인 상태 || 유저가 독서한 적 없는 책일 때
+        if (myBookList == null || (myBookList.isEmpty())) {
+            return null;
+        } else {
+            return myBookList.get(0);
+        }
     }
 
     public MyBook createMyBook(Long bookId) {
