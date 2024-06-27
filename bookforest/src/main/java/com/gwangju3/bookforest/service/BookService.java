@@ -111,17 +111,26 @@ public class BookService {
 
     }
 
-    public void createBookLike(CreateBookLikeRequest request) {
-        String username = UserUtil.extractUsername();
-        User user = userRepository.findByUsername(username).get(0);
-
+    public boolean toggleBookLike(CreateBookLikeRequest request) {
+        User user = userRepository.findByUsername(UserUtil.extractUsername()).get(0);
         Book book = bookRepository.findBookById(request.getBookId());
 
-        BookLike bookLike = new BookLike();
+        List<BookLike> bookLikes = bookRepository.findBookLikeByUserBook(user.getId(), book.getId());
 
-        bookLike.setBook(book);
-        bookLike.setUser(user);
+        if (bookLikes.isEmpty()) {
+            BookLike bookLike = new BookLike();
 
-        bookRepository.saveBookLike(bookLike);
+            bookLike.setBook(book);
+            bookLike.setUser(user);
+
+            bookRepository.saveBookLike(bookLike);
+
+            return true;
+        } else {
+            BookLike bookLike = bookLikes.get(0);
+            bookRepository.deleteBookLike(bookLike);
+
+            return false;
+        }
     }
 }

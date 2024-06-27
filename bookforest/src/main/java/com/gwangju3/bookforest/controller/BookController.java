@@ -3,8 +3,6 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
-import com.gwangju3.bookforest.domain.User;
-import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
@@ -12,7 +10,6 @@ import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.mapper.QuickReviewMapper;
 import com.gwangju3.bookforest.service.BookService;
-import com.gwangju3.bookforest.util.UserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -140,13 +137,12 @@ public class BookController {
      * 찜
      * */
 
-
-    // 책 찜하기
-    @ResponseStatus(HttpStatus.CREATED)
+    // 찜 취소
     @PostMapping("/like")
-    public void likeBook(
+    public ResponseEntity<Object> toggleBookLike(
             @RequestBody @Valid CreateBookLikeRequest request
     ) {
-        bookService.createBookLike(request);
+        boolean didCreate = bookService.toggleBookLike(request);
+        return (didCreate) ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

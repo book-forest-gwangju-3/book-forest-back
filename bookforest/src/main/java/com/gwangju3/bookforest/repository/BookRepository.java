@@ -31,10 +31,6 @@ public class BookRepository {
         return em.find(Book.class, bookId);
     }
 
-    public QuickReview findQuickReviewById(Long quickReviewId) {
-        return em.find(QuickReview.class, quickReviewId);
-    }
-
     public List<Book> findAllBook() {
         return em.createQuery("select b from Book b", Book.class)
                 .getResultList();
@@ -48,6 +44,7 @@ public class BookRepository {
                 .getResultList();
     }
 
+    // id로 고치기
     public List<MyBook> findMyBookByUserBook(String username, Long bookId) {
         if (username == null) return null;
         return em.createQuery(
@@ -60,8 +57,27 @@ public class BookRepository {
                 .getResultList();
     }
 
+    public QuickReview findQuickReviewById(Long quickReviewId) {
+        return em.find(QuickReview.class, quickReviewId);
+    }
+
     public void deleteQuickReview(QuickReview quickReview) {
         em.remove(quickReview);
     }
 
+    // 프론트 측에 주는 반환값에 booklike 고유의 id가 존재하지 않음
+    public List<BookLike> findBookLikeByUserBook(Long userId, Long bookId) {
+        return em.createQuery(
+                        "select b from BookLike b"
+                                + " where b.user.id = :userId"
+                                + " and b.book.id = :bookId"
+                        , BookLike.class)
+                .setParameter("userId", userId)
+                .setParameter("bookId", bookId)
+                .getResultList();
+    }
+
+    public void deleteBookLike(BookLike bookLike) {
+        em.remove(bookLike);
+    }
 }
