@@ -10,7 +10,6 @@ import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.mapper.QuickReviewMapper;
 import com.gwangju3.bookforest.service.BookService;
-import com.gwangju3.bookforest.util.UserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -130,5 +129,20 @@ public class BookController {
             MessageResponse message = new MessageResponse("작성자만 삭제가 가능합니다.");
             return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
         }
+    }
+
+
+
+    /*
+     * 찜
+     * */
+
+    // 찜 취소
+    @PostMapping("/like")
+    public ResponseEntity<Object> toggleBookLike(
+            @RequestBody @Valid CreateBookLikeRequest request
+    ) {
+        boolean didCreate = bookService.toggleBookLike(request);
+        return (didCreate) ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.domain;
 
+import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.domain.like.Like;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -52,6 +53,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<BookReview> BookReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<BookLike> bookLikes = new ArrayList<>();
 
     public User(String username, String password, String nickname) {
         this.username = username;
