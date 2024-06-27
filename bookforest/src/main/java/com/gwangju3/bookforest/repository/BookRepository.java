@@ -26,6 +26,10 @@ public class BookRepository {
         return em.find(Book.class, bookId);
     }
 
+    public QuickReview findQuickReviewById(Long quickReviewId) {
+        return em.find(QuickReview.class, quickReviewId);
+    }
+
     public List<Book> findAllBook() {
         return em.createQuery("select b from Book b", Book.class)
                 .getResultList();
@@ -50,4 +54,7 @@ public class BookRepository {
                 .getResultList();
     }
 
+    public void deleteQuickReview(QuickReview quickReview) {
+        em.remove(quickReview);
+    }
 }
