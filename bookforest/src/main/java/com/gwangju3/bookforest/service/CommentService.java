@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.domain.Comment;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.comment.CreateCommentRequest;
+import com.gwangju3.bookforest.dto.comment.UpdateCommentRequest;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
 import com.gwangju3.bookforest.repository.CommentRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
@@ -36,5 +37,17 @@ public class CommentService {
         commentRepository.save(comment);
         System.out.println(comment.getContent());
         return comment.getId();
+    }
+
+    @Transactional
+    public void updateComment(Long commentId, UpdateCommentRequest request) {
+        Comment comment = commentRepository.findCommentById(commentId);
+
+        String currentUsername = UserUtil.extractUsername();
+        String writerUsername = comment.getUser().getUsername();
+
+        if (currentUsername.equals(writerUsername)) {
+            comment.updateContent(request.getContent());
+        }
     }
 }
