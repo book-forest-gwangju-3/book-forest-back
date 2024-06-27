@@ -3,6 +3,8 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
+import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
@@ -130,5 +132,21 @@ public class BookController {
             MessageResponse message = new MessageResponse("작성자만 삭제가 가능합니다.");
             return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
         }
+    }
+
+
+
+    /*
+     * 찜
+     * */
+
+
+    // 책 찜하기
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/like")
+    public void likeBook(
+            @RequestBody @Valid CreateBookLikeRequest request
+    ) {
+        bookService.createBookLike(request);
     }
 }

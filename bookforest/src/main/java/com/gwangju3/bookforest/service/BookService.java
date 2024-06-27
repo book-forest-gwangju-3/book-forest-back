@@ -4,6 +4,8 @@ import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
 import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.domain.like.BookLike;
+import com.gwangju3.bookforest.dto.book.CreateBookLikeRequest;
 import com.gwangju3.bookforest.dto.book.CreateQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.DeleteQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.UpdateQuickReviewRequest;
@@ -107,5 +109,19 @@ public class BookService {
             return false;
         }
 
+    }
+
+    public void createBookLike(CreateBookLikeRequest request) {
+        String username = UserUtil.extractUsername();
+        User user = userRepository.findByUsername(username).get(0);
+
+        Book book = bookRepository.findBookById(request.getBookId());
+
+        BookLike bookLike = new BookLike();
+
+        bookLike.setBook(book);
+        bookLike.setUser(user);
+
+        bookRepository.saveBookLike(bookLike);
     }
 }

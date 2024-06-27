@@ -2,6 +2,7 @@ package com.gwangju3.bookforest.repository;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
+import com.gwangju3.bookforest.domain.like.BookLike;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,10 @@ public class BookRepository {
 
     public void saveQuickReview(QuickReview quickReview) {
         em.persist(quickReview);
+    }
+
+    public void saveBookLike(BookLike bookLike) {
+        em.persist(bookLike);
     }
 
     public Book findBookById(Long bookId) {
@@ -58,4 +63,5 @@ public class BookRepository {
     public void deleteQuickReview(QuickReview quickReview) {
         em.remove(quickReview);
     }
+
 }
