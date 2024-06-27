@@ -9,6 +9,7 @@ import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
+import com.gwangju3.bookforest.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,5 +65,17 @@ public class BookReviewService {
         BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
 
         bookReview.update(title, content);
+    }
+
+    @Transactional
+    public void deleteBook(Long bookReviewId) {
+        BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
+
+        String currentUsername = UserUtil.extractUsername();
+        String writerUsername = bookReview.getUser().getUsername();
+
+        if (currentUsername.equals(writerUsername)) {
+            bookReviewRepository.delete(bookReview);
+        }
     }
 }
