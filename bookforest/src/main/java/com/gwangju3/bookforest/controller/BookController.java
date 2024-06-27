@@ -69,7 +69,7 @@ public class BookController {
 
     // 독서 페이지 기록 (MyBook 엔티티의 lastReadPage 수정)
     @PatchMapping("/{bookId}/read")
-    public ResponseEntity<?> updateMyBook(
+    public ResponseEntity<Object> updateMyBook(
             @PathVariable("bookId") String bookId,
             @RequestBody @Valid UpdateMyBookRequest request
     ) {
@@ -102,7 +102,7 @@ public class BookController {
 
     // 한줄평 수정
     @PatchMapping("/quick-reviews")
-    public ResponseEntity<?> updateQuickReview(
+    public ResponseEntity<Object> updateQuickReview(
             @RequestBody @Valid UpdateQuickReviewRequest request
     ) {
         QuickReview quickReview = bookService.updateQuickReview(request);
@@ -118,7 +118,7 @@ public class BookController {
 
     // 한줄평 삭제
     @DeleteMapping("/quick-reviews")
-    public ResponseEntity<?> deleteQuickReview(
+    public ResponseEntity<Object> deleteQuickReview(
             @RequestBody @Valid DeleteQuickReviewRequest request
     ) {
         Boolean didDelete = bookService.deleteQuickReview(request);

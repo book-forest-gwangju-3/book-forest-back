@@ -30,7 +30,6 @@ public class BookService {
         return bookRepository.findBookById(bookId);
     }
 
-
     @Transactional(readOnly = true)
     public List<Book> findAllBook() {
         return bookRepository.findAllBook();
@@ -60,7 +59,6 @@ public class BookService {
         bookRepository.saveMyBook(myBook);
         return myBook;
     }
-
 
     public MyBook updateMyBook(long bookId, Integer page) {
         MyBook mybook = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId).get(0);
@@ -96,7 +94,6 @@ public class BookService {
     }
 
     public Boolean deleteQuickReview(DeleteQuickReviewRequest request) {
-
         QuickReview quickReview = bookRepository.findQuickReviewById(request.getQuickReviewId());
 
         String username = UserUtil.extractUsername();
@@ -108,7 +105,6 @@ public class BookService {
         } else {
             return false;
         }
-
     }
 
     public boolean toggleBookLike(CreateBookLikeRequest request) {

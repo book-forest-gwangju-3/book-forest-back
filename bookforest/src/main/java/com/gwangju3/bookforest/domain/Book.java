@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class Book {
 
     private String coverUrl;
 
+    @Nullable @Setter
     private Integer bestRank;
 
     private Integer page;
@@ -43,6 +46,7 @@ public class Book {
 
     }
 
+    // bestRank 포함
     public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer bestRank, Integer page, Integer standardPrice, String publisher, String categoryName) {
         this.id = id;
         this.title = title;
@@ -56,6 +60,21 @@ public class Book {
         this.publisher = publisher;
         this.categoryName = categoryName;
     }
+
+    // bestRank 미포함
+    public Book(Long id, String title, String author, LocalDate pubDate, String description, String coverUrl, Integer page, Integer standardPrice, String publisher, String categoryName) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.pubDate = pubDate;
+        this.description = description;
+        this.coverUrl = coverUrl;
+        this.page = page;
+        this.standardPrice = standardPrice;
+        this.publisher = publisher;
+        this.categoryName = categoryName;
+    }
+
 
     // TODO: QuickReview, BookLike 목록
     @OneToMany(mappedBy = "book")
