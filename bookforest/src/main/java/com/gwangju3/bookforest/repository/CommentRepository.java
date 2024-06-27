@@ -18,4 +18,8 @@ public class CommentRepository {
     public Comment findCommentById(Long commentId) {
         return em.find(Comment.class, commentId);
     }
+
+    public void delete(Comment comment) {
+        em.remove(comment);
+    }
 }
