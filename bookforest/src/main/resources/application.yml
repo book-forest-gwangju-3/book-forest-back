@@ -1,4 +1,9 @@
 spring:
+  # import .env
+  # .env를 .env.properties 로 해석
+  # optional이 붙어서 .env파일이 없어도 에러나지 않음
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:h2:tcp://localhost/~/bookforest
     username: sa
@@ -12,7 +17,7 @@ spring:
         show_sql: true
         format_sql: true
   jwt:
-    secret: rlarkfkachlwodnjsdbsgkdusdlawnsgmlrlarkfkachlwodnjsdbsgkdusdlawnsgml
+    secret: ${JWT_SECRET_KEY}
 logging:
   level:
     org.hibernate.SQL: debug
