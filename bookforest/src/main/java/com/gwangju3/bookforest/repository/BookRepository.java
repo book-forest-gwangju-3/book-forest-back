@@ -1,6 +1,7 @@
 package com.gwangju3.bookforest.repository;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
+import com.gwangju3.bookforest.domain.QuickReview;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,10 @@ public class BookRepository {
 
     public void saveMyBook(MyBook myBook) {
         em.persist(myBook);
+    }
+
+    public void saveQuickReview(QuickReview quickReview) {
+        em.persist(quickReview);
     }
 
     public Book findBookById(Long bookId) {
@@ -44,4 +49,5 @@ public class BookRepository {
                 .setParameter("bookId", bookId)
                 .getResultList();
     }
+
 }
