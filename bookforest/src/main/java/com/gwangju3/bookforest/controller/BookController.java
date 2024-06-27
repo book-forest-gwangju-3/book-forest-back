@@ -2,14 +2,13 @@ package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
+import com.gwangju3.bookforest.domain.QuickReview;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
 import com.gwangju3.bookforest.dto.MessageResponse;
-import com.gwangju3.bookforest.dto.book.BookDTO;
-import com.gwangju3.bookforest.dto.book.MyBookDTO;
-import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
-import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
+import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
+import com.gwangju3.bookforest.mapper.QuickReviewMapper;
 import com.gwangju3.bookforest.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,4 +63,24 @@ public class BookController {
         }
     }
 
+
+    // 한줄평 생성
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/books/quick-reviews")
+    public QuickReviewDTO createQuickReview(
+            @RequestBody @Valid CreateQuickReviewRequest request
+    ) {
+        QuickReview quickReview = bookService.createQuickReview(request);
+        return QuickReviewMapper.entityToDTO(quickReview);
+    }
+
+
+    // 한줄평 수정
+//    @PatchMapping("/books/quick-reviews")
+//    public QuickReviewDTO updateQuickReview(
+//            @RequestBody @Valid CreateQuickReviewRequest request
+//    ) {
+//        QuickReview quickReview = bookService.updateQuickReview(request);
+//        return QuickReviewMapper.entityToDTO(quickReview);
+//    }
 }
