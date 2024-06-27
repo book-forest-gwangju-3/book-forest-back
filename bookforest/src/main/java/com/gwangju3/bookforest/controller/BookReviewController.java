@@ -3,7 +3,9 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
+import com.gwangju3.bookforest.dto.bookreview.BookReviewDetailDTO;
 import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
+import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewDetailResponse;
 import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewListResponse;
 import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewResponse;
 import com.gwangju3.bookforest.mapper.BookReviewMapper;
@@ -40,11 +42,11 @@ public class BookReviewController {
     }
 
     @GetMapping("/book-reviews/{bookReviewId}")
-    public ReadBookReviewResponse bookReview(@PathVariable("bookReviewId") Long id) {
+    public ReadBookReviewDetailResponse bookReview(@PathVariable("bookReviewId") Long id) {
         BookReview bookReview = bookReviewService.findBook(id);
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
+        BookReviewDetailDTO bookReviewDetailDTO = BookReviewMapper.toDetailDTO(bookReview);
 
-        return new ReadBookReviewResponse(bookReviewDTO);
+        return new ReadBookReviewDetailResponse(bookReviewDetailDTO);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
