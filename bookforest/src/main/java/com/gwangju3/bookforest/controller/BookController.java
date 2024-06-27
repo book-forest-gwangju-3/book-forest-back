@@ -32,7 +32,7 @@ public class BookController {
     * */
 
     // 책 전체 목록 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ReadBookListResponse books() {
         List<Book> allBooks = bookService.findAllBook();
 
