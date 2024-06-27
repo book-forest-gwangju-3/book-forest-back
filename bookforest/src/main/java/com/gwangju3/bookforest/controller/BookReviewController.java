@@ -30,7 +30,7 @@ public class BookReviewController {
     public ReadBookReviewListResponse bookReviews() {
         List<BookReview> bookReviews = bookReviewService.findAll();
         List<BookReviewDTO> collect = bookReviews.stream()
-                .map(BookReviewMapper::toDto)
+                .map(BookReviewMapper::toDTO)
                 .collect(Collectors.toList());
 
         return new ReadBookReviewListResponse(collect, collect.size());
@@ -39,7 +39,7 @@ public class BookReviewController {
     @GetMapping("/book-reviews/{bookReviewId}")
     public ReadBookReviewResponse bookReview(@PathVariable("bookReviewId") Long id) {
         BookReview bookReview = bookReviewService.findBook(id);
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
 
         return new ReadBookReviewResponse(bookReviewDTO);
     }
@@ -50,7 +50,7 @@ public class BookReviewController {
         Long id = bookReviewService.createBookReview(request);
         BookReview bookReview = bookReviewService.findBook(id);
 
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
 
         return new ReadBookReviewResponse(bookReviewDTO);
     }
@@ -60,7 +60,7 @@ public class BookReviewController {
         bookReviewService.updateBook(request, bookReviewId);
         BookReview bookReview = bookReviewService.findBook(bookReviewId);
 
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
         return new ReadBookReviewResponse(bookReviewDTO);
     }
 }
