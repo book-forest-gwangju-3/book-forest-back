@@ -137,7 +137,7 @@ public class BookController {
      * 찜
      * */
 
-    // 찜 취소
+    // 찜하기 & 취소
     @PostMapping("/like")
     public ResponseEntity<Object> toggleBookLike(
             @RequestBody @Valid CreateBookLikeRequest request
