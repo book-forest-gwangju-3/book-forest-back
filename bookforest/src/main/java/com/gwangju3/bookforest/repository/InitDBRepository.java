@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class InitDBRepository {
     public String initDB(int numOfPages) throws IOException {
         for (int i = 1; i <= numOfPages; i++) {
             String url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=" + ALADIN_API_KEY + "&QueryType=Bestseller&MaxResults=50&start="+ i + "&SearchTarget=Book&output=js&Version=20131101";
-            JSONArray bestSellerArray = parseJson(url);
+            JSONArray bestSellerArray = getItemArray(url);
             for (int j = 0; j < bestSellerArray.length(); j++) {
                 JSONObject o = bestSellerArray.getJSONObject(j);
                 Long id = o.getLong("itemId");
@@ -47,7 +46,7 @@ public class InitDBRepository {
                 String categoryName = o.getString("categoryName");
 
                 String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=ttbchakkerly1400002&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = parseJson(newUrl).getJSONObject(0);
+                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
                 JSONObject subInfo = detailObj.getJSONObject("subInfo");
                 Integer page = subInfo.getInt("itemPage");
                 Book book = new Book(id, title, author, pubDate, description, coverUrl, bestRank, page, standardPrice, publisher, categoryName);
@@ -58,7 +57,7 @@ public class InitDBRepository {
         return numOfPages + " page(s) saved";
     }
 
-    private static JSONArray parseJson(String givenUrl) throws IOException {
+    private static JSONArray getItemArray(String givenUrl) throws IOException {
         URL url = new URL(givenUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
