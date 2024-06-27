@@ -27,4 +27,12 @@ public class BookReviewRepository {
     public void save(BookReview bookReview) {
         em.persist(bookReview);
     }
+
+    public void delete(BookReview bookReview) {
+        if (em.contains(bookReview)) {
+            em.remove(bookReview);
+        } else {
+            em.remove(em.merge(bookReview));
+        }
+    }
 }

@@ -10,6 +10,7 @@ import com.gwangju3.bookforest.mapper.BookReviewMapper;
 import com.gwangju3.bookforest.service.BookReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,6 +63,12 @@ public class BookReviewController {
 
         BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
         return new ReadBookReviewResponse(bookReviewDTO);
+    }
+
+    @DeleteMapping("/book-reviews/{bookReviewId}")
+    public String deleteBookReview(@PathVariable("bookReviewId") Long bookReviewId) {
+        bookReviewService.deleteBook(bookReviewId);
+        return "delete success";
     }
 }
 
