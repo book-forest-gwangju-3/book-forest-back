@@ -51,4 +51,8 @@ public class Comment {
         this.bookReview = bookReview;
         getBookReview().getComments().add(this);
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
