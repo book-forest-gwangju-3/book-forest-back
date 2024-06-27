@@ -66,6 +66,7 @@ public class SecurityConfig {
                                 "/user/signup",
                                 "/initdb/*",
                                 "/books",
+                                "/books/{bookId}",
                                 "/book-reviews",
                                 "/book-reviews/*"
                         ).permitAll()
