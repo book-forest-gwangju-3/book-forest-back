@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CustomUserDetails;
+import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
@@ -53,5 +54,15 @@ public class BookReviewService {
         bookReviewRepository.save(bookReview);
 
         return bookReview.getId();
+    }
+
+    @Transactional
+    public void updateBook(UpdateBookReviewRequest request, Long bookReviewId) {
+        String title = request.getTitle();
+        String content = request.getContent();
+
+        BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
+
+        bookReview.update(title, content);
     }
 }
