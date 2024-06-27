@@ -8,7 +8,7 @@ import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
 
 public class BookReviewMapper {
-    public static BookReviewDTO toDto(BookReview bookReview) {
+    public static BookReviewDTO toDTO(BookReview bookReview) {
         User user = bookReview.getUser();
         Book book = bookReview.getBook();
 

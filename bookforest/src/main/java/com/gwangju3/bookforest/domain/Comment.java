@@ -38,6 +38,11 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    public Comment(User user, String content) {
+        this.user = user;
+        this.content = content;
+    }
+
     public void setBookReview(BookReview bookReview) {
         this.bookReview = bookReview;
         getBookReview().getComments().add(this);
