@@ -9,6 +9,7 @@ import com.gwangju3.bookforest.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +27,8 @@ public class CommentController {
     @PostMapping("book-reviews/{bookReviewId}/comments")
     public CommentDTO createComment(
             @PathVariable("bookReviewId") Long bookReviewId,
-            @RequestBody @Valid CreateCommentRequest request) {
-        
+            @RequestBody @Valid CreateCommentRequest request
+    ) {
         Long commentId = commentService.createComment(bookReviewId, request);
         Comment comment = commentService.findComment(commentId);
 
@@ -45,4 +46,12 @@ public class CommentController {
         return CommentMapper.toDTO(comment);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("book-reviews/{bookReviewId}/comments/{commentId}")
+    public void deleteComment(
+            @PathVariable("commentId") Long commentId
+    ) {
+        System.out.println(commentId);
+        commentService.deleteComment(commentId);
+    }
 }

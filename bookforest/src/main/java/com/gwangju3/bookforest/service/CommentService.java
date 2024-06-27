@@ -50,4 +50,16 @@ public class CommentService {
             comment.updateContent(request.getContent());
         }
     }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findCommentById(commentId);
+
+        String currentUsername = UserUtil.extractUsername();
+        String writerUsername = comment.getUser().getUsername();
+
+        if (currentUsername.equals(writerUsername)) {
+            commentRepository.delete(comment);
+        }
+    }
 }
