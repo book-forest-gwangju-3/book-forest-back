@@ -26,54 +26,8 @@ public class InitDBRepository {
     private final EntityManager em;
     private final BookRepository bookRepository;
 
-    public String initDB(int numOfPages) throws IOException {
-        for (int i = 1; i <= numOfPages; i++) {
-            String url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=" + ALADIN_API_KEY + "&QueryType=Bestseller&MaxResults=50&start="+ i + "&SearchTarget=Book&output=js&Version=20131101";
-            JSONArray bestSellerArray = getItemArray(url);
-            for (int j = 0; j < bestSellerArray.length(); j++) {
-                JSONObject o = bestSellerArray.getJSONObject(j);
-                Long id = o.getLong("itemId");
-                if (bookRepository.findBookById(id) != null) continue;
-                String title = o.getString("title");
-                String author = o.getString("author").split(" \\(")[0];
+    public void saveBook(Book book) {
 
-                LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
-                String description = o.getString("description");
-                String coverUrl = o.getString("cover");
-                Integer bestRank = o.getInt("bestRank");
-                Integer standardPrice = o.getInt("priceStandard");
-                String publisher = o.getString("publisher");
-                String categoryName = o.getString("categoryName");
-
-                String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=ttbchakkerly1400002&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
-                JSONObject subInfo = detailObj.getJSONObject("subInfo");
-                Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, bestRank, page, standardPrice, publisher, categoryName);
-                em.persist(book);
-            }
-        }
-
-        return numOfPages + " page(s) saved";
-    }
-
-    private static JSONArray getItemArray(String givenUrl) throws IOException {
-        URL url = new URL(givenUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-        String line = null;
-        StringBuilder sb = new StringBuilder();
-
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-        }
-
-        JSONObject jsonObject = new JSONObject(sb.toString());
-        return jsonObject.getJSONArray("item");
+        em.persist(book);
     }
 }

@@ -1,32 +1,72 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.Book;
+import com.gwangju3.bookforest.dto.InitDBRequest;
+import com.gwangju3.bookforest.dto.book.BookDTO;
+import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
+import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
+import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.repository.InitDBRepository;
-import jakarta.persistence.EntityManager;
+import com.gwangju3.bookforest.service.InitDBService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@RequestMapping("/initdb")
 @RestController
 @RequiredArgsConstructor
 public class InitDBController {
 
-    private final InitDBRepository initDBRepository;
+    private final InitDBService initDBService;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/initdb/{page}")
-    public String initDB(@PathVariable("page") String page) throws IOException {
-        // 1페이지당 책 50개 저장
-        // 최대 20페이지까지 가능 (최대 1000개)
-        return initDBRepository.initDB(Integer.parseInt(page));
+    @PostMapping("/best")
+    public ReadBookListResponse saveBestSeller(
+            @RequestBody @Valid InitDBRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> bestSellerList = initDBService.saveBestSeller(request);
+        List<BookDTO> items = bestSellerList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @PostMapping("/new-all")
+    public ReadBookListResponse saveNewAll(
+            @RequestBody @Valid InitDBRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> newBookList = initDBService.saveNewAll(request);
+        List<BookDTO> items = newBookList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @PostMapping("/new-special")
+    public ReadBookListResponse saveNewSpecial(
+            @RequestBody @Valid InitDBRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> newSpecialBookList = initDBService.saveNewSpecial(request);
+        List<BookDTO> items = newSpecialBookList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @PostMapping("/editor")
+    public ReadBookListResponse saveEditorChoice(
+            @RequestBody @Valid InitDBRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> editorChoiceList = initDBService.saveEditorChoice(request);
+        List<BookDTO> items = editorChoiceList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
     }
 }

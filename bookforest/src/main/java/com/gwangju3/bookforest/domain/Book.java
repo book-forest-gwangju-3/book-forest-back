@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public class Book {
 
     private String coverUrl;
 
-    @Nullable
+    @Nullable @Setter
     private Integer bestRank;
 
     private Integer page;
