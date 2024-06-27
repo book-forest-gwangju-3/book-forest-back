@@ -65,5 +65,10 @@ public class BookReview {
 
     @OneToMany(mappedBy = "bookReview")
     private List<BookReviewLike> bookReviewLikes = new ArrayList<>();
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
 

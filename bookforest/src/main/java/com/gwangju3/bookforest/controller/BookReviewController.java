@@ -1,6 +1,7 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.BookReview;
+import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewListResponse;
@@ -10,6 +11,7 @@ import com.gwangju3.bookforest.service.BookReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +36,8 @@ public class BookReviewController {
         return new ReadBookReviewListResponse(collect, collect.size());
     }
 
-    @GetMapping("/book-reviews/{book_review_id}")
-    public ReadBookReviewResponse bookReview(@PathVariable("book_review_id") Long id) {
+    @GetMapping("/book-reviews/{bookReviewId}")
+    public ReadBookReviewResponse bookReview(@PathVariable("bookReviewId") Long id) {
         BookReview bookReview = bookReviewService.findBook(id);
         BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
 
@@ -50,6 +52,15 @@ public class BookReviewController {
 
         BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
 
+        return new ReadBookReviewResponse(bookReviewDTO);
+    }
+
+    @PatchMapping("/book-reviews/{bookReviewId}")
+    public ReadBookReviewResponse updateBookReview(@PathVariable("bookReviewId") Long bookReviewId, @RequestBody UpdateBookReviewRequest request) {
+        bookReviewService.updateBook(request, bookReviewId);
+        BookReview bookReview = bookReviewService.findBook(bookReviewId);
+
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDto(bookReview);
         return new ReadBookReviewResponse(bookReviewDTO);
     }
 }
