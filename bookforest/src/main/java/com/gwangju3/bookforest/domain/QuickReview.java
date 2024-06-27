@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.domain;
 
+import com.gwangju3.bookforest.util.UserUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +30,7 @@ public class QuickReview {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Setter
     private String content;
 
     @CreationTimestamp

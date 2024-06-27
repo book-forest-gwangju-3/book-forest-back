@@ -3,7 +3,6 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
-import com.gwangju3.bookforest.dto.CreateUserRequest;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.mapper.BookMapper;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequestMapping("/books")
 @RestController
 @RequiredArgsConstructor
 public class BookController {
@@ -27,7 +27,7 @@ public class BookController {
 
 
     // 책 전체 목록 조회
-    @GetMapping("/books")
+    @GetMapping("/")
     public ReadBookListResponse books() {
         List<Book> allBooks = bookService.findAllBooks();
 
@@ -41,7 +41,7 @@ public class BookController {
 
     // 독서 시작 (MyBook 엔티티 생성)
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/books/{bookId}/start")
+    @PostMapping("/{bookId}/start")
     public MyBookDTO createMyBook(@PathVariable("bookId") String bookId) {
         MyBook myBook = bookService.createMyBook(Long.parseLong(bookId));
         return MyBookMapper.entityToDTO(myBook);
@@ -49,7 +49,7 @@ public class BookController {
 
 
     // 독서 페이지 기록 (MyBook 엔티티의 lastReadPage 수정)
-    @PatchMapping("/books/{bookId}/read")
+    @PatchMapping("/{bookId}/read")
     public ResponseEntity<?> updateMyBook(
             @PathVariable("bookId") String bookId,
             @RequestBody @Valid UpdateMyBookRequest request
@@ -66,7 +66,7 @@ public class BookController {
 
     // 한줄평 생성
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/books/quick-reviews")
+    @PostMapping("/quick-reviews")
     public QuickReviewDTO createQuickReview(
             @RequestBody @Valid CreateQuickReviewRequest request
     ) {
@@ -76,11 +76,33 @@ public class BookController {
 
 
     // 한줄평 수정
-//    @PatchMapping("/books/quick-reviews")
-//    public QuickReviewDTO updateQuickReview(
-//            @RequestBody @Valid CreateQuickReviewRequest request
-//    ) {
-//        QuickReview quickReview = bookService.updateQuickReview(request);
-//        return QuickReviewMapper.entityToDTO(quickReview);
-//    }
+    @PatchMapping("/quick-reviews")
+    public ResponseEntity<?> updateQuickReview(
+            @RequestBody @Valid UpdateQuickReviewRequest request
+    ) {
+        QuickReview quickReview = bookService.updateQuickReview(request);
+
+        if (quickReview != null) {
+            return new ResponseEntity<>(QuickReviewMapper.entityToDTO(quickReview), HttpStatus.OK);
+        } else {
+            MessageResponse message = new MessageResponse("작성자만 수정이 가능합니다.");
+            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+        }
+    }
+
+
+    // 한줄평 삭제
+    @DeleteMapping("/quick-reviews")
+    public ResponseEntity<?> deleteQuickReview(
+            @RequestBody @Valid DeleteQuickReviewRequest request
+    ) {
+        Boolean didDelete = bookService.deleteQuickReview(request);
+
+        if (didDelete) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            MessageResponse message = new MessageResponse("작성자만 삭제가 가능합니다.");
+            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+        }
+    }
 }
