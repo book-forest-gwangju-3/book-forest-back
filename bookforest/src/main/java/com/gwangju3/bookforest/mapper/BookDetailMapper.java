@@ -15,6 +15,14 @@ public class BookDetailMapper {
                 .map(QuickReviewMapper::entityToDTO)
                 .collect(Collectors.toList());
 
+        if (myBook == null) {
+            return new ReadBookDetailResponse(
+                    BookMapper.entityToDTO(book),
+                    null,
+                    quickReviewDTOS
+            );
+        }
+
         return new ReadBookDetailResponse(
                 BookMapper.entityToDTO(book),
                 new ReadStatusDTO(myBook.getLastReadPage(), myBook.getReadCompleted()),
