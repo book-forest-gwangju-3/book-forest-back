@@ -28,7 +28,7 @@ public class Tier {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private TierName name = TierName.BRONZE;
+    private TierName tierName = TierName.BRONZE;
 
     private Integer exp = 0;
 
@@ -37,4 +37,23 @@ public class Tier {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void addEXP(Integer exp) {
+        this.exp += exp;
+        updateTierName();
+    }
+
+    private void updateTierName() {
+        if (exp < 1000) {
+            this.tierName = TierName.BRONZE;
+        } else if (exp < 10000) {
+            this.tierName = TierName.SILVER;
+        } else if (exp < 50000) {
+            this.tierName = TierName.GOLD;
+        } else if (exp < 100000) {
+            this.tierName = TierName.PLATINUM;
+        } else {
+            this.tierName = TierName.DIAMOND;
+        }
+    }
 }
