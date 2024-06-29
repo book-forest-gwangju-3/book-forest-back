@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.domain;
 
+import com.gwangju3.bookforest.domain.commit.Commit;
 import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.domain.like.BookReviewLike;
 import com.gwangju3.bookforest.domain.like.Like;
@@ -61,6 +62,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookReviewLike> bookReviewLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Commit> commits = new ArrayList<>();
+
     public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
@@ -70,5 +74,4 @@ public class User {
     protected User() {
 
     }
-// TODO commit, like 목록
 }

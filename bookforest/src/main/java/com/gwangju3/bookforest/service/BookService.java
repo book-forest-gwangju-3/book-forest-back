@@ -24,6 +24,7 @@ import java.util.List;
 public class BookService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final CommitService commitService;
 
     @Transactional(readOnly = true)
     public Book findBookById(Long bookId) {
@@ -62,8 +63,14 @@ public class BookService {
 
     public MyBook updateMyBook(long bookId, Integer page) {
         MyBook mybook = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId).get(0);
+        Integer readPage = page - mybook.getLastReadPage();
         boolean didUpdate = mybook.setLastReadPage(page);
-        return (didUpdate) ? mybook : null;
+        if (didUpdate) {
+            commitService.createReadCommit(readPage, mybook);
+            return mybook;
+        } else {
+            return null;
+        }
     }
 
     public QuickReview createQuickReview(CreateQuickReviewRequest request) {
