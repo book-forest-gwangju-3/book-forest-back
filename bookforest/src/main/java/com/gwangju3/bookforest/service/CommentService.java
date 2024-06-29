@@ -3,6 +3,7 @@ package com.gwangju3.bookforest.service;
 import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.domain.Comment;
 import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.domain.commit.Commit;
 import com.gwangju3.bookforest.dto.comment.CreateCommentRequest;
 import com.gwangju3.bookforest.dto.comment.UpdateCommentRequest;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
@@ -20,6 +21,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final BookReviewRepository bookReviewRepository;
     private final CommentRepository commentRepository;
+    private final CommitService commitService;
 
     public Comment findComment(Long commentId) {
         return commentRepository.findCommentById(commentId);
@@ -35,7 +37,7 @@ public class CommentService {
         comment.setBookReview(bookReview);
 
         commentRepository.save(comment);
-        System.out.println(comment.getContent());
+        commitService.createCommentCommit(comment);
         return comment.getId();
     }
 

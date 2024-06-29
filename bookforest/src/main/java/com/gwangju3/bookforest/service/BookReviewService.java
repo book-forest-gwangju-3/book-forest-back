@@ -29,6 +29,7 @@ public class BookReviewService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final CommitService commitService;
 
     public List<BookReview> findAll() {
         return bookReviewRepository.findAll();
@@ -56,6 +57,7 @@ public class BookReviewService {
         bookReview.setUser(writer);
 
         bookReviewRepository.save(bookReview);
+        commitService.createBookReviewCommit(bookReview);
 
         return bookReview.getId();
     }
