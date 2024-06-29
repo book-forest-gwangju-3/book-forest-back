@@ -19,4 +19,6 @@ public class BookReviewDetailDTO {
     private UserDTO user;
     private BookReviewBookDTO book;
     private List<CommentDTO> comments;
+    private Long likeCount;
+    private Boolean liked;
 }

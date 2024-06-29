@@ -3,11 +3,13 @@ package com.gwangju3.bookforest.service;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.domain.like.BookReviewLike;
 import com.gwangju3.bookforest.dto.CustomUserDetails;
 import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
+import com.gwangju3.bookforest.repository.LikeRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
 import com.gwangju3.bookforest.util.UserUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class BookReviewService {
     private final BookReviewRepository bookReviewRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     public List<BookReview> findAll() {
         return bookReviewRepository.findAll();
@@ -77,5 +80,30 @@ public class BookReviewService {
         if (currentUsername.equals(writerUsername)) {
             bookReviewRepository.delete(bookReview);
         }
+    }
+
+    @Transactional
+    public boolean createBookReviewLike(Long bookReviewId) {
+        BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
+        User user = userRepository.findByUsername(UserUtil.extractUsername()).get(0);
+
+        List<BookReviewLike> bookReviewLikes = likeRepository.findBookReviewLikeByBookReviewAndUser(bookReview, user);
+
+        if (bookReviewLikes.isEmpty()) {
+            BookReviewLike bookReviewLike = new BookReviewLike();
+
+            bookReviewLike.setUser(user);
+            bookReviewLike.setBookReview(bookReview);
+
+            likeRepository.save(bookReviewLike);
+
+            return true;
+        } else {
+            BookReviewLike bookReviewLike = bookReviewLikes.get(0);
+            likeRepository.delete(bookReviewLike);
+
+            return false;
+        }
+
     }
 }
