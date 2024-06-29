@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.service;
 
+import com.gwangju3.bookforest.domain.Tier;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
 import com.gwangju3.bookforest.repository.UserRepository;
@@ -22,8 +23,9 @@ public class SignUpService {
         String username = request.getUsername();
         String password = request.getPassword();
         String nickname = request.getNickname();
+        Tier tier = new Tier();
 
-        User user = new User(username, bCryptPasswordEncoder.encode(password), nickname);
+        User user = new User(username, bCryptPasswordEncoder.encode(password), nickname, tier);
 
         validateDuplicateUser(user);
 

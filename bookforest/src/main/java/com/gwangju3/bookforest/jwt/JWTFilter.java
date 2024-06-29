@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.jwt;
 
+import com.gwangju3.bookforest.domain.Tier;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
@@ -48,7 +49,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
 
         //userEntity를 생성하여 값 set
-        User user = new User(username, "temp", "temp");
+        User user = new User(username, "temp", "temp", new Tier());
 
         //UserDetails에 회원 정보 객체 담기
         CustomUserDetails customUserDetails = new CustomUserDetails(user);

@@ -65,10 +65,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Commit> commits = new ArrayList<>();
 
-    public User(String username, String password, String nickname) {
+    public User(String username, String password, String nickname, Tier tier) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+        this.tier = tier;
     }
 
     protected User() {

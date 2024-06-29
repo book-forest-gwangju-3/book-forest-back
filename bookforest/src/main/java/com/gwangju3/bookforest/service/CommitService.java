@@ -24,6 +24,7 @@ public class CommitService {
 
     private final CommitRepository commitRepository;
     private final UserRepository userRepository;
+    private final TierService tierService;
 
     @Transactional(readOnly = true)
     public List<Commit> findCommitsByUser() {
@@ -36,7 +37,9 @@ public class CommitService {
 
         Commit commit = new BookReviewCommit(200, bookReview);
         commit.setUser(user);
+
         commitRepository.save(commit);
+        tierService.updateTierEXP(user, commit);
     }
 
     public void createReadCommit(Integer readPage, MyBook mybook) {
@@ -44,7 +47,10 @@ public class CommitService {
 
         Commit commit = new ReadCommit(readPage, mybook);
         commit.setUser(user);
+
         commitRepository.save(commit);
+        tierService.updateTierEXP(user, commit);
+
     }
 
     public void createCommentCommit(Comment comment) {
@@ -52,6 +58,10 @@ public class CommitService {
 
         Commit commit = new CommentCommit(10, comment);
         commit.setUser(user);
+
         commitRepository.save(commit);
+        tierService.updateTierEXP(user, commit);
+
+
     }
 }
