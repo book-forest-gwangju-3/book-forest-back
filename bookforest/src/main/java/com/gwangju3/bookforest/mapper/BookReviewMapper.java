@@ -8,6 +8,7 @@ import com.gwangju3.bookforest.domain.like.BookReviewLike;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewBookDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDetailDTO;
+import com.gwangju3.bookforest.dto.bookreview.BookReviewUserDTO;
 import com.gwangju3.bookforest.dto.comment.CommentDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
 
@@ -90,6 +91,16 @@ public class BookReviewMapper {
                 commentDTOs,
                 (long) likes.size(),
                 isLikedByCurrentUser
+        );
+    }
+
+    public static BookReviewUserDTO toUserDTO(BookReview bookReview) {
+        return new BookReviewUserDTO(
+                bookReview.getId(),
+                bookReview.getTitle(),
+                bookReview.getContent(),
+                bookReview.getBook().getCoverUrl(),
+                bookReview.getCreatedAt()
         );
     }
 }
