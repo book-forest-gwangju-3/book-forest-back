@@ -17,6 +17,7 @@ public class BookReviewMapper {
     public static BookReviewDTO toDTO(BookReview bookReview, String currentUsername) {
         User user = bookReview.getUser();
         Book book = bookReview.getBook();
+        List<Comment> comments = bookReview.getComments();
         List<BookReviewLike> likes = bookReview.getBookReviewLikes();
 
         UserDTO userDTO = new UserDTO(
@@ -44,6 +45,7 @@ public class BookReviewMapper {
                 bookReview.getUpdatedAt(),
                 userDTO,
                 bookReviewBookDTO,
+                comments.size(),
                 (long) likes.size(),
                 isLikedByCurrentUser
         );
@@ -84,6 +86,7 @@ public class BookReviewMapper {
                 bookReview.getUpdatedAt(),
                 userDTO,
                 bookReviewBookDTO,
+                comments.size(),
                 commentDTOs,
                 (long) likes.size(),
                 isLikedByCurrentUser
