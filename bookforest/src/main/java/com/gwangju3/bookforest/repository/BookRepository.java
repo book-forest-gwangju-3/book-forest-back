@@ -2,6 +2,7 @@ package com.gwangju3.bookforest.repository;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
+import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.domain.like.BookLike;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,28 @@ public class BookRepository {
                 .getResultList();
     }
 
+    public List<MyBook> findReadingBookListByUserId(Long userId) {
+        return em.createQuery(
+                        "select m from MyBook m"
+                                + " join fetch m.book"
+                                + " where m.user.id = :userId"
+                                + " and m.readCompleted = false"
+                        , MyBook.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    public List<MyBook> findCompletedBookListByUserId(Long userId) {
+        return em.createQuery(
+                        "select m from MyBook m"
+                                + " join fetch m.book"
+                                + " where m.user.id = :userId"
+                                + " and m.readCompleted = true"
+                        , MyBook.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
     // id로 고치기
     public List<MyBook> findMyBookByUserBook(String username, Long bookId) {
         if (username == null) return null;
@@ -80,4 +103,6 @@ public class BookRepository {
     public void deleteBookLike(BookLike bookLike) {
         em.remove(bookLike);
     }
+
+
 }
