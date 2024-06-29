@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.BookReview;
 import com.gwangju3.bookforest.domain.Comment;
 import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.domain.like.BookReviewLike;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewBookDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDetailDTO;
@@ -13,9 +14,10 @@ import com.gwangju3.bookforest.dto.user.UserDTO;
 import java.util.List;
 
 public class BookReviewMapper {
-    public static BookReviewDTO toDTO(BookReview bookReview) {
+    public static BookReviewDTO toDTO(BookReview bookReview, String currentUsername) {
         User user = bookReview.getUser();
         Book book = bookReview.getBook();
+        List<BookReviewLike> likes = bookReview.getBookReviewLikes();
 
         UserDTO userDTO = new UserDTO(
                 user.getId(),
@@ -30,6 +32,10 @@ public class BookReviewMapper {
                 book.getCoverUrl()
         );
 
+
+        boolean isLikedByCurrentUser = likes.stream()
+                .anyMatch(like -> like.getUser().getUsername().equals(currentUsername));
+
         return new BookReviewDTO(
                 bookReview.getId(),
                 bookReview.getTitle(),
@@ -37,14 +43,17 @@ public class BookReviewMapper {
                 bookReview.getCreatedAt(),
                 bookReview.getUpdatedAt(),
                 userDTO,
-                bookReviewBookDTO
+                bookReviewBookDTO,
+                (long) likes.size(),
+                isLikedByCurrentUser
         );
     }
 
-    public static BookReviewDetailDTO toDetailDTO(BookReview bookReview) {
+    public static BookReviewDetailDTO toDetailDTO(BookReview bookReview, String currentUsername) {
         User user = bookReview.getUser();
         Book book = bookReview.getBook();
         List<Comment> comments = bookReview.getComments();
+        List<BookReviewLike> likes = bookReview.getBookReviewLikes();
 
         UserDTO userDTO = new UserDTO(
                 user.getId(),
@@ -63,6 +72,10 @@ public class BookReviewMapper {
                 .map(CommentMapper::toDTO)
                 .toList();
 
+        boolean isLikedByCurrentUser = likes.stream()
+                .anyMatch(like -> like.getUser().getUsername().equals(currentUsername));
+
+
         return new BookReviewDetailDTO(
                 bookReview.getId(),
                 bookReview.getTitle(),
@@ -71,7 +84,9 @@ public class BookReviewMapper {
                 bookReview.getUpdatedAt(),
                 userDTO,
                 bookReviewBookDTO,
-                commentDTOs
+                commentDTOs,
+                (long) likes.size(),
+                isLikedByCurrentUser
         );
     }
 }

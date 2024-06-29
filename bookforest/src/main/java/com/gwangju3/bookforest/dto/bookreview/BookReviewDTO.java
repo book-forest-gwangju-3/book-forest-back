@@ -17,4 +17,6 @@ public class BookReviewDTO {
     private LocalDateTime updatedAt;
     private UserDTO user;
     private BookReviewBookDTO book;
+    private Long likeCount;
+    private Boolean liked;
 }

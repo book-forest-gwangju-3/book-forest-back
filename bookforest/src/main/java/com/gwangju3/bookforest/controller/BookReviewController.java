@@ -1,6 +1,7 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.BookReview;
+import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewDetailDTO;
@@ -10,6 +11,7 @@ import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewListResponse;
 import com.gwangju3.bookforest.dto.bookreview.ReadBookReviewResponse;
 import com.gwangju3.bookforest.mapper.BookReviewMapper;
 import com.gwangju3.bookforest.service.BookReviewService;
+import com.gwangju3.bookforest.util.UserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,8 +36,9 @@ public class BookReviewController {
     @GetMapping("/book-reviews")
     public ReadBookReviewListResponse bookReviews() {
         List<BookReview> bookReviews = bookReviewService.findAll();
+        String currentUsername = UserUtil.extractUsername();
         List<BookReviewDTO> collect = bookReviews.stream()
-                .map(BookReviewMapper::toDTO)
+                .map(bookReview -> BookReviewMapper.toDTO(bookReview, currentUsername))
                 .collect(Collectors.toList());
 
         return new ReadBookReviewListResponse(collect, collect.size());
@@ -44,7 +47,8 @@ public class BookReviewController {
     @GetMapping("/book-reviews/{bookReviewId}")
     public ReadBookReviewDetailResponse bookReview(@PathVariable("bookReviewId") Long id) {
         BookReview bookReview = bookReviewService.findBook(id);
-        BookReviewDetailDTO bookReviewDetailDTO = BookReviewMapper.toDetailDTO(bookReview);
+        String currentUsername = UserUtil.extractUsername();
+        BookReviewDetailDTO bookReviewDetailDTO = BookReviewMapper.toDetailDTO(bookReview, currentUsername);
 
         return new ReadBookReviewDetailResponse(bookReviewDetailDTO);
     }
@@ -55,8 +59,9 @@ public class BookReviewController {
         System.out.println(request.getTitle());
         Long id = bookReviewService.createBookReview(request);
         BookReview bookReview = bookReviewService.findBook(id);
+        String currentUsername = UserUtil.extractUsername();
 
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview, currentUsername);
 
         return new ReadBookReviewResponse(bookReviewDTO);
     }
@@ -65,8 +70,9 @@ public class BookReviewController {
     public ReadBookReviewResponse updateBookReview(@PathVariable("bookReviewId") Long bookReviewId, @RequestBody UpdateBookReviewRequest request) {
         bookReviewService.updateBook(request, bookReviewId);
         BookReview bookReview = bookReviewService.findBook(bookReviewId);
+        String currentUsername = UserUtil.extractUsername();
 
-        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview);
+        BookReviewDTO bookReviewDTO = BookReviewMapper.toDTO(bookReview, currentUsername);
         return new ReadBookReviewResponse(bookReviewDTO);
     }
 
@@ -74,6 +80,16 @@ public class BookReviewController {
     @DeleteMapping("/book-reviews/{bookReviewId}")
     public void deleteBookReview(@PathVariable("bookReviewId") Long bookReviewId) {
         bookReviewService.deleteBook(bookReviewId);
+    }
+
+    @PostMapping("/book-reviews/{bookReviewId}/likes")
+    public MessageResponse createBookReviewLike(@PathVariable("bookReviewId") Long bookReviewId) {
+        boolean created = bookReviewService.createBookReviewLike(bookReviewId);
+
+        if (created) {
+            return new MessageResponse("좋아요 생성");
+        }
+        return new MessageResponse("좋아요 취소");
     }
 }
 
