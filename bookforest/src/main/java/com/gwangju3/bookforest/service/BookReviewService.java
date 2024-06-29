@@ -35,7 +35,7 @@ public class BookReviewService {
         return bookReviewRepository.findAll();
     }
 
-    public BookReview findBook(Long id) {
+    public BookReview findBookReview(Long id) {
         return bookReviewRepository.findBookReviewById(id);
     }
 
@@ -63,7 +63,7 @@ public class BookReviewService {
     }
 
     @Transactional
-    public void updateBook(UpdateBookReviewRequest request, Long bookReviewId) {
+    public void updateBookReview(UpdateBookReviewRequest request, Long bookReviewId) {
         String title = request.getTitle();
         String content = request.getContent();
 
@@ -73,7 +73,7 @@ public class BookReviewService {
     }
 
     @Transactional
-    public void deleteBook(Long bookReviewId) {
+    public void deleteBookReview(Long bookReviewId) {
         BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
 
         String currentUsername = UserUtil.extractUsername();
@@ -107,5 +107,9 @@ public class BookReviewService {
             return false;
         }
 
+    }
+
+    public List<BookReview> findBookReviewByUserId(Long userId) {
+        return bookReviewRepository.findBookReviewByUserId(userId);
     }
 }

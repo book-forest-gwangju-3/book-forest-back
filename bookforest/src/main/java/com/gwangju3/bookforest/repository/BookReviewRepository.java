@@ -35,4 +35,12 @@ public class BookReviewRepository {
             em.remove(em.merge(bookReview));
         }
     }
+
+    public List<BookReview> findBookReviewByUserId(Long userId) {
+        return em.createQuery("select br from BookReview br"
+                        + " where br.user.id = :userId", BookReview.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
 }
