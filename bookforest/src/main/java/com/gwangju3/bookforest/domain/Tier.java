@@ -1,5 +1,6 @@
 package com.gwangju3.bookforest.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,13 +24,13 @@ public class Tier {
     @Column(name = "tier_id")
     private Long id;
 
-    @OneToOne(mappedBy = "tier", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "tier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private TierName name;
+    private TierName name = TierName.BRONZE;
 
-    private Integer exp;
+    private Integer exp = 0;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
