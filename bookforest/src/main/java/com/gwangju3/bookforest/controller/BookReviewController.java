@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +37,11 @@ public class BookReviewController {
     private final BookReviewService bookReviewService;
 
     @GetMapping("/book-reviews")
-    public ReadBookReviewListResponse bookReviews() {
-        List<BookReview> bookReviews = bookReviewService.findAll();
+    public ReadBookReviewListResponse bookReviews(
+            @RequestParam(required = false, defaultValue = "") String q,
+            @RequestParam(required = false, defaultValue = "") String sortBy
+    ) {
+        List<BookReview> bookReviews = bookReviewService.searchBookReview(q, sortBy);
         String currentUsername = UserUtil.extractUsername();
         List<BookReviewDTO> collect = bookReviews.stream()
                 .map(bookReview -> BookReviewMapper.toDTO(bookReview, currentUsername))
