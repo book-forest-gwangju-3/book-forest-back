@@ -1,13 +1,9 @@
 package com.gwangju3.bookforest.dto.book;
 
-import com.gwangju3.bookforest.domain.Book;
-import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.user.UserDTO;
-import jakarta.persistence.*;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 

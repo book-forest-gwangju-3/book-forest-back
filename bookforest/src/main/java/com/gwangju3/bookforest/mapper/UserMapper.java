@@ -2,6 +2,7 @@ package com.gwangju3.bookforest.mapper;
 
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 
 public class UserMapper {
     public static UserDTO entityToDTO(User user) {

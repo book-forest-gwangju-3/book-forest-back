@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.Comment;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.comment.CommentDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 
 public class CommentMapper {
     public static CommentDTO toDTO(Comment comment) {

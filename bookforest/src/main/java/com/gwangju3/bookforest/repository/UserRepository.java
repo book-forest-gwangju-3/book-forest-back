@@ -29,4 +29,11 @@ public class UserRepository {
                 .getResultList();
     }
 
+    public List<User> sortUserByRanking() {
+        return em.createQuery("select u from User u"
+                        + " join fetch u.tier t"
+                        + " order by t.exp desc"
+                        , User.class)
+                .getResultList();
+    }
 }

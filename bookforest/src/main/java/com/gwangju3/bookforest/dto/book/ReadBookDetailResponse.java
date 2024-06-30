@@ -1,7 +1,7 @@
 package com.gwangju3.bookforest.dto.book;
 
-import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
