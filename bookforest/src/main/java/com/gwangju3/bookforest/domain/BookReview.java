@@ -52,7 +52,7 @@ public class BookReview {
     }
 
     // TODO: like
-    @OneToMany(mappedBy = "bookReview")
+    @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public void setUser(User user) {
@@ -60,7 +60,7 @@ public class BookReview {
         getUser().getBookReviews().add(this);
     }
 
-    @OneToMany(mappedBy = "bookReview")
+    @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookReviewLike> bookReviewLikes = new ArrayList<>();
 
     public void update(String title, String content) {
