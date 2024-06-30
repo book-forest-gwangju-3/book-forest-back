@@ -36,6 +36,7 @@ public class BookService {
         return bookRepository.findAllBook();
     }
 
+    @Transactional(readOnly = true)
     public MyBook findMyBookByUserBook(Long bookId) {
         List<MyBook> myBookList = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId);
         // 비로그인 상태 || 유저가 독서한 적 없는 책일 때
@@ -45,6 +46,17 @@ public class BookService {
             return myBookList.get(0);
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<MyBook> findReadingBookListByUserId (Long userId) {
+        return bookRepository.findReadingBookListByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MyBook> findCompletedBookListByUserId (Long userId) {
+        return bookRepository.findCompletedBookListByUserId(userId);
+    }
+
 
     public MyBook createMyBook(Long bookId) {
         String username = UserUtil.extractUsername();
