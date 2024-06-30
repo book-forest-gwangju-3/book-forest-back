@@ -17,14 +17,6 @@ public class BookReviewRepository {
         return em.find(BookReview.class, id);
     }
 
-//    public List<BookReview> searchBookReview(String q, String sortBy) {
-//        return em.createQuery("select br from BookReview br"
-//                                + " join fetch br.user u"
-//                                + " join fetch br.book b"
-//                                + " where br.title like :q", BookReview.class)
-//                .setParameter("q", "%" + q + "%")
-//                .getResultList();
-//    }
     public List<BookReview> searchBookReview(String q, String sortBy) {
         String baseQuery = "select br from BookReview br" +
                 " join fetch br.user u" +
@@ -36,11 +28,11 @@ public class BookReviewRepository {
         if (!sortBy.isEmpty()) {
             String orderByClause = "";
             if ("likes".equals(sortBy)) {
-                orderByClause = " group by br.id order by count(bl) desc";
+                orderByClause = " order by count(bl) desc";
             } else if ("recent".equals(sortBy)) {
                 orderByClause = " order by br.createdAt desc";
             } else if ("comments".equals(sortBy)) {
-                orderByClause = " group by br.id order by count(c) desc";
+                orderByClause = " order by count(c) desc";
             }
 
             baseQuery += orderByClause;
@@ -57,11 +49,7 @@ public class BookReviewRepository {
     }
 
     public void delete(BookReview bookReview) {
-        if (em.contains(bookReview)) {
-            em.remove(bookReview);
-        } else {
-            em.remove(em.merge(bookReview));
-        }
+        em.remove(bookReview);
     }
 
     public List<BookReview> findBookReviewByUserId(Long userId) {
