@@ -22,6 +22,7 @@ public class CommentService {
     private final BookReviewRepository bookReviewRepository;
     private final CommentRepository commentRepository;
     private final CommitService commitService;
+    private final TierService tierService;
 
     public Comment findComment(Long commentId) {
         return commentRepository.findCommentById(commentId);
@@ -62,6 +63,7 @@ public class CommentService {
 
         if (currentUsername.equals(writerUsername)) {
             commentRepository.delete(comment);
+            tierService.subtractTierEXP(userRepository.findByUsername(currentUsername).get(0), 10);
         }
     }
 }

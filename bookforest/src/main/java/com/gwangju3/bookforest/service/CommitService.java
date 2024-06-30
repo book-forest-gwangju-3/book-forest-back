@@ -39,7 +39,7 @@ public class CommitService {
         commit.setUser(user);
 
         commitRepository.save(commit);
-        tierService.updateTierEXP(user, commit);
+        tierService.addTierEXP(user, commit);
     }
 
     public void createReadCommit(Integer readPage, MyBook mybook) {
@@ -49,7 +49,7 @@ public class CommitService {
         commit.setUser(user);
 
         commitRepository.save(commit);
-        tierService.updateTierEXP(user, commit);
+        tierService.addTierEXP(user, commit);
 
     }
 
@@ -60,7 +60,7 @@ public class CommitService {
         commit.setUser(user);
 
         commitRepository.save(commit);
-        tierService.updateTierEXP(user, commit);
+        tierService.addTierEXP(user, commit);
 
 
     }

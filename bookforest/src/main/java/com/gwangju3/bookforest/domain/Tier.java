@@ -43,6 +43,11 @@ public class Tier {
         updateTierName();
     }
 
+    public void subtractEXP(Integer exp) {
+        this.exp -= exp;
+        updateTierName();
+    }
+
     private void updateTierName() {
         if (exp < 1000) {
             this.tierName = TierName.BRONZE;
