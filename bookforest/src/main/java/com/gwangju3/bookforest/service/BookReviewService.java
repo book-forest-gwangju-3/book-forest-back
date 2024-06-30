@@ -30,6 +30,7 @@ public class BookReviewService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final CommitService commitService;
+    private final TierService tierService;
 
     public List<BookReview> searchBookReview(String q, String sortBy) {
         return bookReviewRepository.searchBookReview(q, sortBy);
@@ -81,6 +82,7 @@ public class BookReviewService {
 
         if (currentUsername.equals(writerUsername)) {
             bookReviewRepository.delete(bookReview);
+            tierService.subtractTierEXP(userRepository.findByUsername(currentUsername).get(0), 200);
         }
     }
 
