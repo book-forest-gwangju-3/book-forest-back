@@ -33,8 +33,10 @@ public class BookController {
 
     // 책 전체 목록 조회
     @GetMapping("")
-    public ReadBookListResponse books() {
-        List<Book> allBooks = bookService.findAllBook();
+    public ReadBookListResponse books(
+            @RequestParam(defaultValue = "") String q
+    ) {
+        List<Book> allBooks = bookService.searchBook(q);
 
         List<BookDTO> items = allBooks.stream()
                 .map(BookMapper::entityToDTO)

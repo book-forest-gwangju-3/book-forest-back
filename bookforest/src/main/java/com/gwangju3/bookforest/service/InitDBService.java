@@ -38,7 +38,7 @@ public class InitDBService {
     public List<Book> saveBestSeller(InitDBRequest request) throws IOException, URISyntaxException {
 
         // DB에 저장된 책들의 베스트셀러 순위를 무효처리
-        List<Book> allBook = bookRepository.findAllBook();
+        List<Book> allBook = bookRepository.searchBook("");
         for (Book book : allBook) {
             book.setBestRank(null);
         }
