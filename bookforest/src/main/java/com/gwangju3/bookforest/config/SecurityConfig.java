@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
                                 "/user/signup",
+                                "/user/ranking",
                                 "/user/{userId}/books/*",
                                 "/initdb/*",
                                 "/books",

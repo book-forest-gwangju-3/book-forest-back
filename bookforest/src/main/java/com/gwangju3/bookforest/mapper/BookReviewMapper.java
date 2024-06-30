@@ -11,6 +11,7 @@ import com.gwangju3.bookforest.dto.bookreview.BookReviewDetailDTO;
 import com.gwangju3.bookforest.dto.bookreview.BookReviewUserDTO;
 import com.gwangju3.bookforest.dto.comment.CommentDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 
 import java.util.List;
 

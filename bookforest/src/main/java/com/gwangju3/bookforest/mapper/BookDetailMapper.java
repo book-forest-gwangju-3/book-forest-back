@@ -6,6 +6,7 @@ import com.gwangju3.bookforest.dto.book.QuickReviewDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookDetailResponse;
 import com.gwangju3.bookforest.dto.book.ReadStatusDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;

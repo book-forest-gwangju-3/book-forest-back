@@ -1,25 +1,26 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.MyBook;
+import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.BookDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
-import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import com.gwangju3.bookforest.mapper.BookMapper;
+import com.gwangju3.bookforest.mapper.UserMapper;
+import com.gwangju3.bookforest.mapper.UserRankingMapper;
 import com.gwangju3.bookforest.service.BookService;
 import com.gwangju3.bookforest.service.SignUpService;
 import com.gwangju3.bookforest.service.UserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,11 +37,20 @@ public class UserController {
         return userService.findMe();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/ranking")
+    public List<UserRankingDTO> sortUserByRanking() {
+        List<User> users = userService.sortUserByRanking();
+        List<UserRankingDTO> result = users.stream()
+                .map(UserRankingMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return result;
+    }
+
     @PostMapping("/signup")
-    public String signUp(@RequestBody @Valid CreateUserRequest request) {
+    public ResponseEntity<Object> signUp(@RequestBody @Valid CreateUserRequest request) {
         signUpService.signUp(request);
-        return "Welcome";
+        MessageResponse messageResponse = new MessageResponse("Welcome");
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}/books/reading")

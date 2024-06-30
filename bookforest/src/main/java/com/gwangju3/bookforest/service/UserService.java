@@ -2,11 +2,14 @@ package com.gwangju3.bookforest.service;
 
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import com.gwangju3.bookforest.repository.UserRepository;
 import com.gwangju3.bookforest.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +24,10 @@ public class UserService {
         User user = userRepository.findByUsername(username).get(0);
 
         return new UserDTO(user.getId(), user.getUsername(), user.getNickname());
+    }
+
+    public List<User> sortUserByRanking() {
+        List<User> users = userRepository.sortUserByRanking();
+        return users;
     }
 }

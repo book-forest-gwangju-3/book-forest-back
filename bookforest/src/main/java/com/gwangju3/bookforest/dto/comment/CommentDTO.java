@@ -1,7 +1,7 @@
 package com.gwangju3.bookforest.dto.comment;
 
-import com.gwangju3.bookforest.dto.bookreview.BookReviewDTO;
 import com.gwangju3.bookforest.dto.user.UserDTO;
+import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
