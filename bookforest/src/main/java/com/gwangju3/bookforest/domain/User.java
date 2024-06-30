@@ -62,7 +62,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookReviewLike> bookReviewLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Commit> commits = new ArrayList<>();
 
     public User(String username, String password, String nickname, Tier tier) {
