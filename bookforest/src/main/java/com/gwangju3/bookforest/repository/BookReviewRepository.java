@@ -6,7 +6,10 @@ import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,11 +31,16 @@ public class BookReviewRepository {
         if (!sortBy.isEmpty()) {
             String orderByClause = "";
             if ("likes".equals(sortBy)) {
-                orderByClause = " order by count(bl) desc";
+                orderByClause = " group by br.id order by count(bl) desc";
             } else if ("recent".equals(sortBy)) {
                 orderByClause = " order by br.createdAt desc";
             } else if ("comments".equals(sortBy)) {
-                orderByClause = " order by count(c) desc";
+                orderByClause = " group by br.id order by count(c) desc";
+            } else if ("weeklyBest".equals(sortBy)) {
+                LocalDateTime startOfWeek = LocalDateTime.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1).toLocalDate().atStartOfDay();
+
+                baseQuery += " and (bl.createdAt between :startOfWeek and :endOfWeek or bl.createdAt is null)";
+                orderByClause = " group by br.id order by count(bl) desc";
             }
 
             baseQuery += orderByClause;
@@ -40,6 +48,17 @@ public class BookReviewRepository {
 
         TypedQuery<BookReview> query = em.createQuery(baseQuery, BookReview.class);
         query.setParameter("q", "%" + q + "%");
+
+        if ("weeklyBest".equals(sortBy)) {
+            LocalDateTime startOfWeek = LocalDateTime.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1).toLocalDate().atStartOfDay();
+            LocalDateTime endOfWeek = startOfWeek.plusDays(7);
+            query.setParameter("startOfWeek", startOfWeek);
+            query.setParameter("endOfWeek", endOfWeek);
+        }
+
+        if ("weeklyBest".equals(sortBy)) {
+            query.setMaxResults(3); // 상위 3개 독후감만 반환
+        }
 
         return query.getResultList();
     }
