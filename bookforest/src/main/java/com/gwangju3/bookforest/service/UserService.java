@@ -40,21 +40,28 @@ public class UserService {
         return tier;
     }
 
-    public Integer findPosition() {
+    public int[] findPosition() {
         List<User> users = userRepository.findAll();
 
         String username = UserUtil.extractUsername();
         User me = userRepository.findByUsername(username).get(0);
 
+
+
         int totalUsers = users.size();
+        int[] position = new int[2];
 
         for (int i = 0; i < totalUsers; i++) {
             if (users.get(i).equals(me)) {
                 // 상위 퍼센트 계산
-                return (int) ((totalUsers - i - 1) * 100.0 / totalUsers);
+
+                position[0] = (int) ((totalUsers - i - 1) * 100.0 / totalUsers);
+                position[1] = i + 1;
+
             }
         }
 
-        return -1;
+        return position;
+
     }
 }

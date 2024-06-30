@@ -11,4 +11,5 @@ public class UserTierDTO {
     TierName tierName;
     Integer exp;
     Integer position;
+    Integer rank;
 }
