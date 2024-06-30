@@ -43,13 +43,14 @@ public class UserController {
     @GetMapping("/my-tier")
     public UserTierDTO getUserTier() {
         Tier userTier = userService.findUserTier();
-        Integer position = userService.findPosition();
+        int[] position = userService.findPosition();
 
         return new UserTierDTO(
                 UserMapper.entityToDTO(userTier.getUser()),
                 userTier.getTierName(),
                 userTier.getExp(),
-                position
+                position[0],
+                position[1]
         );
     }
 
