@@ -1,12 +1,7 @@
 package com.gwangju3.bookforest.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.gwangju3.bookforest.domain.commit.CommentCommit;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,6 +33,8 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "comment", cascade = CascadeType.ALL)
+    private CommentCommit commentCommit;
 
     protected Comment() {
     }

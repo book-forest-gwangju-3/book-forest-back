@@ -15,7 +15,7 @@ import lombok.Getter;
 public class ReadCommit extends Commit {
     private Integer readPages;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_book_id")
     private MyBook myBook;
 

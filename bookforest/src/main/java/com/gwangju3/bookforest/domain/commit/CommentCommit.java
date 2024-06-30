@@ -17,7 +17,7 @@ import lombok.Getter;
 @DiscriminatorValue("COMMENT")
 public class CommentCommit extends Commit {
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 

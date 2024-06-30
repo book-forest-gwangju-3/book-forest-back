@@ -15,7 +15,7 @@ import lombok.Getter;
 @DiscriminatorValue("BOOK_REVIEW")
 public class BookReviewCommit extends Commit {
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_review_id")
     private BookReview bookReview;
 
