@@ -29,7 +29,7 @@ import java.util.List;
 public class InitDBService {
     @Value("${ALADIN_API_KEY}")
     private String ALADIN_API_KEY;
-    private String urlString = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?SearchTarget=Book&output=js&Version=20131101";
+    private String urlString = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?SearchTarget=Book&output=js&Version=20131101&InputEncoding=utf-8";
 
     private final InitDBRepository initDBRepository;
     private final BookRepository bookRepository;
