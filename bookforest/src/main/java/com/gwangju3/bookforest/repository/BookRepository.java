@@ -32,8 +32,11 @@ public class BookRepository {
         return em.find(Book.class, bookId);
     }
 
-    public List<Book> findAllBook() {
-        return em.createQuery("select b from Book b", Book.class)
+    public List<Book> searchBook(String q) {
+        return em.createQuery("select b from Book b"
+                        + " where b.title LIKE :keyword"
+                        , Book.class)
+                .setParameter("keyword", "%" + q + "%")
                 .getResultList();
     }
 

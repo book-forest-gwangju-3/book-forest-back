@@ -32,8 +32,8 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<Book> findAllBook() {
-        return bookRepository.findAllBook();
+    public List<Book> searchBook(String q) {
+        return bookRepository.searchBook(q);
     }
 
     @Transactional(readOnly = true)
