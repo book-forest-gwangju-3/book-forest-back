@@ -31,8 +31,8 @@ public class BookReviewService {
     private final LikeRepository likeRepository;
     private final CommitService commitService;
 
-    public List<BookReview> findAll() {
-        return bookReviewRepository.findAll();
+    public List<BookReview> searchBookReview(String q, String sortBy) {
+        return bookReviewRepository.searchBookReview(q, sortBy);
     }
 
     public BookReview findBookReview(Long id) {
