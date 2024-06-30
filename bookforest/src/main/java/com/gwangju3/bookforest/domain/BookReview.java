@@ -1,15 +1,9 @@
 package com.gwangju3.bookforest.domain;
 
+import com.gwangju3.bookforest.domain.commit.BookReviewCommit;
 import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.domain.like.BookReviewLike;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,6 +38,9 @@ public class BookReview {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "bookReview", cascade = CascadeType.ALL)
+    private BookReviewCommit bookReviewCommit;
 
     protected BookReview() {
     }

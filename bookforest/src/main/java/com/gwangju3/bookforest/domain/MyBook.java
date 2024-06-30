@@ -1,14 +1,12 @@
 package com.gwangju3.bookforest.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.gwangju3.bookforest.domain.commit.ReadCommit;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +29,9 @@ public class MyBook {
     private Integer lastReadPage;
 
     private Boolean readCompleted;
+
+    @OneToMany(mappedBy = "myBook", cascade = CascadeType.ALL)
+    private List<ReadCommit> readCommit = new ArrayList<>();
 
     protected MyBook() { }
 
