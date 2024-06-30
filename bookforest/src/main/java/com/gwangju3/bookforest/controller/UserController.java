@@ -36,11 +36,11 @@ public class UserController {
         return userService.findMe();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public String signUp(@RequestBody @Valid CreateUserRequest request) {
+    public ResponseEntity<Object> signUp(@RequestBody @Valid CreateUserRequest request) {
         signUpService.signUp(request);
-        return "Welcome";
+        MessageResponse messageResponse = new MessageResponse("Welcome");
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}/books/reading")
