@@ -2,6 +2,7 @@ package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
+import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.BookDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
 import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
@@ -14,9 +15,11 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,26 +44,40 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/books/reading")
-    public ReadBookListResponse getReadingBookList(
+    public ResponseEntity<Object> getReadingBookList(
             @PathVariable("userId") String userId
     ) {
         List<MyBook> readingBooks = bookService.findReadingBookListByUserId(Long.parseLong(userId));
-        List<BookDTO> items = readingBooks.stream()
-                .map(o -> BookMapper.entityToDTO(o.getBook()))
-                .collect(Collectors.toList());
-
-        return new ReadBookListResponse(items);
+        if (readingBooks == null) {
+            MessageResponse messageResponse = new MessageResponse("독서를 기록한 적이 없습니다.");
+            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        } else if (readingBooks.isEmpty()) {
+            MessageResponse messageResponse = new MessageResponse("현재 독서 진행중인 책이 없습니다.");
+            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        } else {
+            List<BookDTO> items = readingBooks.stream()
+                    .map(o -> BookMapper.entityToDTO(o.getBook()))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(new ReadBookListResponse(items), HttpStatus.OK);
+        }
     }
 
     @GetMapping("/{userId}/books/completed")
-    public ReadBookListResponse getCompletedBookList(
+    public ResponseEntity<Object> getCompletedBookList(
             @PathVariable("userId") String userId
     ) {
         List<MyBook> readingBooks = bookService.findCompletedBookListByUserId(Long.parseLong(userId));
-        List<BookDTO> items = readingBooks.stream()
-                .map(o -> BookMapper.entityToDTO(o.getBook()))
-                .collect(Collectors.toList());
-
-        return new ReadBookListResponse(items);
+        if (readingBooks == null) {
+            MessageResponse messageResponse = new MessageResponse("독서를 기록한 적이 없습니다.");
+            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        } else if (readingBooks.isEmpty()) {
+            MessageResponse messageResponse = new MessageResponse("아직 독서를 완료한 책이 없습니다.");
+            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        } else {
+            List<BookDTO> items = readingBooks.stream()
+                    .map(o -> BookMapper.entityToDTO(o.getBook()))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(new ReadBookListResponse(items), HttpStatus.OK);
+        }
     }
 }
