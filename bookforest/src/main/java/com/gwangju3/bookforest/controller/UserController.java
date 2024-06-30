@@ -1,6 +1,7 @@
 package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.MyBook;
+import com.gwangju3.bookforest.domain.Tier;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
 import com.gwangju3.bookforest.dto.MessageResponse;
@@ -8,6 +9,7 @@ import com.gwangju3.bookforest.dto.book.BookDTO;
 import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
 import com.gwangju3.bookforest.dto.user.UserDTO;
 import com.gwangju3.bookforest.dto.user.UserRankingDTO;
+import com.gwangju3.bookforest.dto.user.UserTierDTO;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.UserMapper;
 import com.gwangju3.bookforest.mapper.UserRankingMapper;
@@ -35,6 +37,20 @@ public class UserController {
     @GetMapping("/my-info")
     public UserDTO userinfo() {
         return userService.findMe();
+    }
+
+
+    @GetMapping("/my-tier")
+    public UserTierDTO getUserTier() {
+        Tier userTier = userService.findUserTier();
+        Integer position = userService.findPosition();
+
+        return new UserTierDTO(
+                UserMapper.entityToDTO(userTier.getUser()),
+                userTier.getTierName(),
+                userTier.getExp(),
+                position
+        );
     }
 
     @GetMapping("/ranking")
@@ -90,4 +106,5 @@ public class UserController {
             return new ResponseEntity<>(new ReadBookListResponse(items), HttpStatus.OK);
         }
     }
+
 }

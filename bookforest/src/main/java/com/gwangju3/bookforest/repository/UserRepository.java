@@ -36,4 +36,11 @@ public class UserRepository {
                         , User.class)
                 .getResultList();
     }
+
+    public List<User> findAll() {
+        return em.createQuery("select u from User u" +
+                        " join fetch u.tier t" +
+                        " order by u.tier.exp desc", User.class)
+                .getResultList();
+    }
 }
