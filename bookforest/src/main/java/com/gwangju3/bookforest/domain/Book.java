@@ -27,6 +27,7 @@ public class Book {
 
     private LocalDate pubDate;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String coverUrl;
