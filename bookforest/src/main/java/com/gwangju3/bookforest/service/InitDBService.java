@@ -22,14 +22,16 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiPredicate;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class InitDBService {
+
     @Value("${ALADIN_API_KEY}")
     private String ALADIN_API_KEY;
-    private String urlString = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?SearchTarget=Book&output=js&Version=20131101&InputEncoding=utf-8";
+    private static String urlString = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?SearchTarget=Book&output=js&Version=20131101&InputEncoding=utf-8";
 
     private final InitDBRepository initDBRepository;
     private final BookRepository bookRepository;
@@ -48,17 +50,10 @@ public class InitDBService {
         List<Book> bestSellerList = new ArrayList<>();
 
         for (int i = 1; i <= requestPage; i++) {
-            URIBuilder uriBuilder = new URIBuilder(urlString);
-            uriBuilder.addParameter("ttbkey", ALADIN_API_KEY)
-                    .addParameter("QueryType", "Bestseller")
-                    .addParameter("MaxResults", String.valueOf(itemsPerPage))
-                    .addParameter("start", String.valueOf(i));
+            JSONArray bestSellerJsonArr = mapURIString("Bestseller", itemsPerPage, i, false, ALADIN_API_KEY);
 
-            URI uri = uriBuilder.build();
-            JSONArray bestSellerArray = getItemArray(uri.toString());
-
-            for (int j = 0; j < bestSellerArray.length(); j++) {
-                JSONObject o = bestSellerArray.getJSONObject(j);
+            for (int j = 0; j < bestSellerJsonArr.length(); j++) {
+                JSONObject o = bestSellerJsonArr.getJSONObject(j);
 
                 Long id = o.getLong("itemId");
                 Integer bestRank = o.getInt("bestRank");
@@ -73,21 +68,8 @@ public class InitDBService {
                     continue;
                 }
 
-                String title = o.getString("title");
-                String author = o.getString("author").split(" \\(")[0];
-                LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
-                String description = o.getString("description");
-                String coverUrl = o.getString("cover");
-                Integer standardPrice = o.getInt("priceStandard");
-                String publisher = o.getString("publisher");
-                String categoryName = o.getString("categoryName");
-
-                String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=" + ALADIN_API_KEY + "&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
-                JSONObject subInfo = detailObj.getJSONObject("subInfo");
-                Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, bestRank, page, standardPrice, publisher, categoryName);
-
+                Book book = jsonObjToEntity(o, ALADIN_API_KEY);
+                book.setBestRank(bestRank);
                 initDBRepository.saveBook(book);
 
                 if (bestSellerList.size() < 50) {
@@ -106,17 +88,10 @@ public class InitDBService {
         List<Book> newBookList = new ArrayList<>();
 
         for (int i = 1; i <= requestPage; i++) {
-            URIBuilder uriBuilder = new URIBuilder(urlString);
-            uriBuilder.addParameter("ttbkey", ALADIN_API_KEY)
-                    .addParameter("QueryType", "ItemNewAll")
-                    .addParameter("MaxResults", String.valueOf(itemsPerPage))
-                    .addParameter("start", String.valueOf(i));
+            JSONArray newBookJsonArr = mapURIString("ItemNewAll", itemsPerPage, i, false, ALADIN_API_KEY);
 
-            URI uri = uriBuilder.build();
-            JSONArray bestSellerArray = getItemArray(uri.toString());
-
-            for (int j = 0; j < bestSellerArray.length(); j++) {
-                JSONObject o = bestSellerArray.getJSONObject(j);
+            for (int j = 0; j < newBookJsonArr.length(); j++) {
+                JSONObject o = newBookJsonArr.getJSONObject(j);
 
                 Long id = o.getLong("itemId");
 
@@ -128,21 +103,7 @@ public class InitDBService {
                     continue;
                 }
 
-                String title = o.getString("title");
-                String author = o.getString("author").split(" \\(")[0];
-                LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
-                String description = o.getString("description");
-                String coverUrl = o.getString("cover");
-                Integer standardPrice = o.getInt("priceStandard");
-                String publisher = o.getString("publisher");
-                String categoryName = o.getString("categoryName");
-
-                String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=" + ALADIN_API_KEY + "&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
-                JSONObject subInfo = detailObj.getJSONObject("subInfo");
-                Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, page, standardPrice, publisher, categoryName);
-
+                Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
 
                 if (newBookList.size() < 50) {
@@ -161,17 +122,10 @@ public class InitDBService {
         List<Book> newBookList = new ArrayList<>();
 
         for (int i = 1; i <= requestPage; i++) {
-            URIBuilder uriBuilder = new URIBuilder(urlString);
-            uriBuilder.addParameter("ttbkey", ALADIN_API_KEY)
-                    .addParameter("QueryType", "ItemNewSpecial")
-                    .addParameter("MaxResults", String.valueOf(itemsPerPage))
-                    .addParameter("start", String.valueOf(i));
+            JSONArray newSpecialJsonArr = mapURIString("ItemNewSpecial", itemsPerPage, i, false, ALADIN_API_KEY);
 
-            URI uri = uriBuilder.build();
-            JSONArray bestSellerArray = getItemArray(uri.toString());
-
-            for (int j = 0; j < bestSellerArray.length(); j++) {
-                JSONObject o = bestSellerArray.getJSONObject(j);
+            for (int j = 0; j < newSpecialJsonArr.length(); j++) {
+                JSONObject o = newSpecialJsonArr.getJSONObject(j);
 
                 Long id = o.getLong("itemId");
 
@@ -183,21 +137,7 @@ public class InitDBService {
                     continue;
                 }
 
-                String title = o.getString("title");
-                String author = o.getString("author").split(" \\(")[0];
-                LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
-                String description = o.getString("description");
-                String coverUrl = o.getString("cover");
-                Integer standardPrice = o.getInt("priceStandard");
-                String publisher = o.getString("publisher");
-                String categoryName = o.getString("categoryName");
-
-                String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=" + ALADIN_API_KEY + "&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
-                JSONObject subInfo = detailObj.getJSONObject("subInfo");
-                Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, page, standardPrice, publisher, categoryName);
-
+                Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
 
                 if (newBookList.size() < 50) {
@@ -216,18 +156,10 @@ public class InitDBService {
         List<Book> newBookList = new ArrayList<>();
 
         for (int i = 1; i <= requestPage; i++) {
-            URIBuilder uriBuilder = new URIBuilder(urlString);
-            uriBuilder.addParameter("ttbkey", ALADIN_API_KEY)
-                    .addParameter("QueryType", "ItemEditorChoice")
-                    .addParameter("CategoryId", "1")
-                    .addParameter("MaxResults", String.valueOf(itemsPerPage))
-                    .addParameter("start", String.valueOf(i));
+            JSONArray editorJsonArr = mapURIString("ItemEditorChoice", itemsPerPage, i, true, ALADIN_API_KEY);
 
-            URI uri = uriBuilder.build();
-            JSONArray bestSellerArray = getItemArray(uri.toString());
-
-            for (int j = 0; j < bestSellerArray.length(); j++) {
-                JSONObject o = bestSellerArray.getJSONObject(j);
+            for (int j = 0; j < editorJsonArr.length(); j++) {
+                JSONObject o = editorJsonArr.getJSONObject(j);
 
                 Long id = o.getLong("itemId");
 
@@ -239,21 +171,7 @@ public class InitDBService {
                     continue;
                 }
 
-                String title = o.getString("title");
-                String author = o.getString("author").split(" \\(")[0];
-                LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
-                String description = o.getString("description");
-                String coverUrl = o.getString("cover");
-                Integer standardPrice = o.getInt("priceStandard");
-                String publisher = o.getString("publisher");
-                String categoryName = o.getString("categoryName");
-
-                String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=" + ALADIN_API_KEY + "&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
-                JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
-                JSONObject subInfo = detailObj.getJSONObject("subInfo");
-                Integer page = subInfo.getInt("itemPage");
-                Book book = new Book(id, title, author, pubDate, description, coverUrl, page, standardPrice, publisher, categoryName);
-
+                Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
 
                 if (newBookList.size() < 50) {
@@ -266,6 +184,43 @@ public class InitDBService {
     }
 
 
+    private static JSONArray mapURIString(String queryType, int itemsPerPage, int i, boolean needCategory, String ALADIN_API_KEY) throws URISyntaxException, IOException {
+        URIBuilder uriBuilder = new URIBuilder(urlString);
+        uriBuilder.addParameter("ttbkey", ALADIN_API_KEY)
+                .addParameter("QueryType", queryType)
+                .addParameter("MaxResults", String.valueOf(itemsPerPage))
+                .addParameter("start", String.valueOf(i));
+
+        if (needCategory) {
+            uriBuilder.addParameter("CategoryId", "1");
+        }
+
+        URI uri = uriBuilder.build();
+        JSONArray bookArray = getItemArray(uri.toString());
+        return bookArray;
+    }
+
+
+    private static Book jsonObjToEntity(JSONObject o, String ALADIN_API_KEY) throws IOException {
+        Long id = o.getLong("itemId");
+        String title = o.getString("title");
+        String author = o.getString("author").split(" \\(")[0];
+        LocalDate pubDate = LocalDate.parse(o.getString("pubDate"));
+        String description = o.getString("description");
+        String coverUrl = o.getString("cover");
+        Integer standardPrice = o.getInt("priceStandard");
+        String publisher = o.getString("publisher");
+        String categoryName = o.getString("categoryName");
+
+        String newUrl = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=" + ALADIN_API_KEY + "&itemIdType=ItemId&ItemId=" + id + "&output=js&Version=20131101";
+        JSONObject detailObj = getItemArray(newUrl).getJSONObject(0);
+        JSONObject subInfo = detailObj.getJSONObject("subInfo");
+        Integer page = subInfo.getInt("itemPage");
+        Book book = new Book(id, title, author, pubDate, description, coverUrl, page, standardPrice, publisher, categoryName);
+        return book;
+    }
+
+
     private static JSONArray getItemArray(String givenUrl) throws IOException {
         URL url = new URL(givenUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -273,7 +228,7 @@ public class InitDBService {
         connection.setRequestMethod("GET");
         connection.setDoOutput(true);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
         String line = null;
         StringBuilder sb = new StringBuilder();
