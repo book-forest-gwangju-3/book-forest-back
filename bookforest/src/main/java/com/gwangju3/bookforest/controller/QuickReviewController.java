@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class QuickReviewController {
 
-    private QuickReviewService quickReviewService;
+    private final QuickReviewService quickReviewService;
 
     // 한줄평 생성
     @ResponseStatus(HttpStatus.CREATED)
