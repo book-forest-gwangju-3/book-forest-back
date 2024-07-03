@@ -16,7 +16,9 @@ import com.gwangju3.bookforest.exception.user.UsernameExistException;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.UserMapper;
 import com.gwangju3.bookforest.mapper.UserRankingMapper;
+import com.gwangju3.bookforest.repository.MyBookRepository;
 import com.gwangju3.bookforest.service.BookService;
+import com.gwangju3.bookforest.service.MyBookService;
 import com.gwangju3.bookforest.service.SignUpService;
 import com.gwangju3.bookforest.service.UserService;
 import jakarta.validation.Valid;
@@ -35,7 +37,7 @@ public class UserController {
 
     private final UserService userService;
     private final SignUpService signUpService;
-    private final BookService bookService;
+    private final MyBookService myBookService;
 
     @GetMapping("/my-info")
     public UserDTO userinfo() {
@@ -77,7 +79,7 @@ public class UserController {
     public ResponseEntity<Object> getReadingBookList(
             @PathVariable("userId") String userId
     ) {
-        List<MyBook> readingBooks = bookService.findReadingBookListByUserId(Long.parseLong(userId));
+        List<MyBook> readingBooks = myBookService.findReadingBookListByUserId(Long.parseLong(userId));
         if (readingBooks == null) {
             MessageResponse messageResponse = new MessageResponse("독서를 기록한 적이 없습니다.");
             return new ResponseEntity<>(messageResponse, HttpStatus.OK);
@@ -96,7 +98,7 @@ public class UserController {
     public ResponseEntity<Object> getCompletedBookList(
             @PathVariable("userId") String userId
     ) {
-        List<MyBook> readingBooks = bookService.findCompletedBookListByUserId(Long.parseLong(userId));
+        List<MyBook> readingBooks = myBookService.findCompletedBookListByUserId(Long.parseLong(userId));
         if (readingBooks == null) {
             MessageResponse messageResponse = new MessageResponse("독서를 기록한 적이 없습니다.");
             return new ResponseEntity<>(messageResponse, HttpStatus.OK);

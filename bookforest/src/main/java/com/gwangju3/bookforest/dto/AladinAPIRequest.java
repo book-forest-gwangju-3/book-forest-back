@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class InitDBRequest {
+public class AladinAPIRequest {
     @NotNull
     Integer page;
 
