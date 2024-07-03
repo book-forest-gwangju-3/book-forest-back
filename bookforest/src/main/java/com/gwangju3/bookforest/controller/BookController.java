@@ -59,7 +59,6 @@ public class BookController {
      * 독서 (MyBook)
      * */
 
-
     // 독서 시작 (MyBook 엔티티 생성)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{bookId}/start")
@@ -83,56 +82,6 @@ public class BookController {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
     }
-
-
-
-    /*
-     * 한줄평
-     * */
-
-
-    // 한줄평 생성
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/quick-reviews")
-    public QuickReviewDTO createQuickReview(
-            @RequestBody @Valid CreateQuickReviewRequest request
-    ) {
-        QuickReview quickReview = bookService.createQuickReview(request);
-        return QuickReviewMapper.entityToDTO(quickReview);
-    }
-
-
-    // 한줄평 수정
-    @PatchMapping("/quick-reviews")
-    public ResponseEntity<Object> updateQuickReview(
-            @RequestBody @Valid UpdateQuickReviewRequest request
-    ) {
-        QuickReview quickReview = bookService.updateQuickReview(request);
-
-        if (quickReview != null) {
-            return new ResponseEntity<>(QuickReviewMapper.entityToDTO(quickReview), HttpStatus.OK);
-        } else {
-            MessageResponse message = new MessageResponse("작성자만 수정이 가능합니다.");
-            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
-        }
-    }
-
-
-    // 한줄평 삭제
-    @DeleteMapping("/quick-reviews")
-    public ResponseEntity<Object> deleteQuickReview(
-            @RequestBody @Valid DeleteQuickReviewRequest request
-    ) {
-        Boolean didDelete = bookService.deleteQuickReview(request);
-
-        if (didDelete) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            MessageResponse message = new MessageResponse("작성자만 삭제가 가능합니다.");
-            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
-        }
-    }
-
 
 
     /*

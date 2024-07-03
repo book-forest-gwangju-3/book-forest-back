@@ -85,46 +85,7 @@ public class BookService {
         }
     }
 
-    public QuickReview createQuickReview(CreateQuickReviewRequest request) {
-        String username = UserUtil.extractUsername();
-        User user = userRepository.findByUsername(username).get(0);
 
-        Book book = bookRepository.findBookById(request.getBookId());
-
-        QuickReview quickReview = new QuickReview(user, request.getContent());
-        quickReview.setBook(book);
-
-        bookRepository.saveQuickReview(quickReview);
-        return quickReview;
-    }
-
-    public QuickReview updateQuickReview(UpdateQuickReviewRequest request) {
-        QuickReview quickReview = bookRepository.findQuickReviewById(request.getQuickReviewId());
-
-        String username = UserUtil.extractUsername();
-        User user = userRepository.findByUsername(username).get(0);
-
-        if (quickReview.getUser().getId().equals(user.getId())) {
-            quickReview.setContent(request.getContent());
-            return quickReview;
-        } else {
-            return null;
-        }
-    }
-
-    public Boolean deleteQuickReview(DeleteQuickReviewRequest request) {
-        QuickReview quickReview = bookRepository.findQuickReviewById(request.getQuickReviewId());
-
-        String username = UserUtil.extractUsername();
-        User user = userRepository.findByUsername(username).get(0);
-
-        if (quickReview.getUser().getId().equals(user.getId())) {
-            bookRepository.deleteQuickReview(quickReview);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public boolean toggleBookLike(CreateBookLikeRequest request) {
         User user = userRepository.findByUsername(UserUtil.extractUsername()).get(0);

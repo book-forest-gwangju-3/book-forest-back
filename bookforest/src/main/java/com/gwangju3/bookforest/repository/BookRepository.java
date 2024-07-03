@@ -20,9 +20,6 @@ public class BookRepository {
         em.persist(myBook);
     }
 
-    public void saveQuickReview(QuickReview quickReview) {
-        em.persist(quickReview);
-    }
 
     public void saveBookLike(BookLike bookLike) {
         em.persist(bookLike);
@@ -83,13 +80,7 @@ public class BookRepository {
                 .getResultList();
     }
 
-    public QuickReview findQuickReviewById(Long quickReviewId) {
-        return em.find(QuickReview.class, quickReviewId);
-    }
 
-    public void deleteQuickReview(QuickReview quickReview) {
-        em.remove(quickReview);
-    }
 
     // 프론트 측에 주는 반환값에 booklike 고유의 id가 존재하지 않음
     public List<BookLike> findBookLikeByUserBook(Long userId, Long bookId) {
