@@ -2,14 +2,10 @@ package com.gwangju3.bookforest.controller;
 
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
-import com.gwangju3.bookforest.domain.QuickReview;
-import com.gwangju3.bookforest.dto.MessageResponse;
+import com.gwangju3.bookforest.dto.AladinAPIRequest;
 import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
 import com.gwangju3.bookforest.mapper.BookMapper;
-import com.gwangju3.bookforest.mapper.MyBookMapper;
-import com.gwangju3.bookforest.mapper.QuickReviewMapper;
-import com.gwangju3.bookforest.repository.MyBookRepository;
 import com.gwangju3.bookforest.service.BookService;
 import com.gwangju3.bookforest.service.MyBookService;
 import jakarta.validation.Valid;
@@ -18,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,5 +60,56 @@ public class BookController {
     ) {
         boolean didCreate = bookService.toggleBookLike(request);
         return (didCreate) ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    /*
+    *
+    * 테마별 책 리스트 조회
+    *
+    * */
+
+    @GetMapping("/best")
+    public ReadBookListResponse saveBestSeller(
+            @RequestBody @Valid AladinAPIRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> bestSellerList = bookService.findBestSeller(request);
+        List<BookDTO> items = bestSellerList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @GetMapping("/new-all")
+    public ReadBookListResponse saveNewAll(
+            @RequestBody @Valid AladinAPIRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> bestSellerList = bookService.findNewAll(request);
+        List<BookDTO> items = bestSellerList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @GetMapping("/new-special")
+    public ReadBookListResponse saveNewSpecial(
+            @RequestBody @Valid AladinAPIRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> bestSellerList = bookService.findNewSpecial(request);
+        List<BookDTO> items = bestSellerList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
+    }
+
+    @GetMapping("/editor")
+    public ReadBookListResponse saveEditorChoice(
+            @RequestBody @Valid AladinAPIRequest request
+    ) throws IOException, URISyntaxException {
+        List<Book> bestSellerList = bookService.findEditorChoice(request);
+        List<BookDTO> items = bestSellerList.stream()
+                .map(BookMapper::entityToDTO)
+                .collect(Collectors.toList());
+        return new ReadBookListResponse(items);
     }
 }

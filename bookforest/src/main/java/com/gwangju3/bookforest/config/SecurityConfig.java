@@ -68,6 +68,10 @@ public class SecurityConfig {
                                 "/user/{userId}/books/*",
                                 "/initdb/*",
                                 "/books",
+                                "/books/best",
+                                "/books/new-all",
+                                "/books/new-special",
+                                "/books/editor",
                                 "/books/{bookId}",
                                 "/book-reviews",
                                 "/book-reviews/*"

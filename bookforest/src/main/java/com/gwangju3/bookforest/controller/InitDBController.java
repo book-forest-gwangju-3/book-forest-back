@@ -1,13 +1,7 @@
 package com.gwangju3.bookforest.controller;
 
-import com.gwangju3.bookforest.domain.Book;
-import com.gwangju3.bookforest.dto.InitDBRequest;
+import com.gwangju3.bookforest.dto.AladinAPIRequest;
 import com.gwangju3.bookforest.dto.MessageResponse;
-import com.gwangju3.bookforest.dto.book.BookDTO;
-import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
-import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
-import com.gwangju3.bookforest.mapper.BookMapper;
-import com.gwangju3.bookforest.repository.InitDBRepository;
 import com.gwangju3.bookforest.service.InitDBService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/initdb")
 @RestController
@@ -29,7 +21,7 @@ public class InitDBController {
 
     @PostMapping("/bomb")
     public ResponseEntity<MessageResponse> oneClickSave(
-            @RequestBody @Valid InitDBRequest request
+            @RequestBody @Valid AladinAPIRequest request
     ) throws IOException, URISyntaxException {
 
         int newAllCount = initDBService.saveNewAll(request);
@@ -52,7 +44,7 @@ public class InitDBController {
 
     @PostMapping("/best")
     public ResponseEntity<MessageResponse> saveBestSeller(
-            @RequestBody @Valid InitDBRequest request
+            @RequestBody @Valid AladinAPIRequest request
     ) throws IOException, URISyntaxException {
         int[] counts = initDBService.saveBestSeller(request);
         MessageResponse messageResponse = new MessageResponse(String.format("%d권의 베스트셀러를 저장하고 %d권의 베스트셀러 순위를 갱신하였습니다.", counts[0], counts[1]));
@@ -65,7 +57,7 @@ public class InitDBController {
 
     @PostMapping("/new-all")
     public ResponseEntity<MessageResponse> saveNewAll(
-            @RequestBody @Valid InitDBRequest request
+            @RequestBody @Valid AladinAPIRequest request
     ) throws IOException, URISyntaxException {
         int saveCount = initDBService.saveNewAll(request);
         MessageResponse messageResponse = new MessageResponse(String.format("%d권의 신간을 저장하였습니다.", saveCount));
@@ -78,7 +70,7 @@ public class InitDBController {
 
     @PostMapping("/new-special")
     public ResponseEntity<MessageResponse> saveNewSpecial(
-            @RequestBody @Valid InitDBRequest request
+            @RequestBody @Valid AladinAPIRequest request
     ) throws IOException, URISyntaxException {
         int saveCount = initDBService.saveNewSpecial(request);
         MessageResponse messageResponse = new MessageResponse(String.format("%d권의 주목할만한 신간을 저장하였습니다.", saveCount));
@@ -91,7 +83,7 @@ public class InitDBController {
 
     @PostMapping("/editor")
     public ResponseEntity<MessageResponse> saveEditorChoice(
-            @RequestBody @Valid InitDBRequest request
+            @RequestBody @Valid AladinAPIRequest request
     ) throws IOException, URISyntaxException {
         int saveCount = initDBService.saveEditorChoice(request);
         MessageResponse messageResponse = new MessageResponse(String.format("%d권의 편집자 추천 책을 저장하였습니다.", saveCount));
