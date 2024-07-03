@@ -27,7 +27,6 @@ public class InitDBRepository {
     private final BookRepository bookRepository;
 
     public void saveBook(Book book) {
-
         em.persist(book);
     }
 }

@@ -57,4 +57,12 @@ public class BookRepository {
     public void deleteBookLike(BookLike bookLike) {
         em.remove(bookLike);
     }
+
+    public List<Book> findBookListByIds(List<Long> ids) {
+        return em.createQuery(
+                        "select b from Book b"
+                                + " where b.id in :ids", Book.class)
+                .setParameter("ids", ids)
+                .getResultList();
+    }
 }
