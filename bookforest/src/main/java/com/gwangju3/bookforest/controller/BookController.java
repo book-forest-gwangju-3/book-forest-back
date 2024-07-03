@@ -9,7 +9,9 @@ import com.gwangju3.bookforest.mapper.BookDetailMapper;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.mapper.QuickReviewMapper;
+import com.gwangju3.bookforest.repository.MyBookRepository;
 import com.gwangju3.bookforest.service.BookService;
+import com.gwangju3.bookforest.service.MyBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,8 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private final BookService bookService;
+    private final MyBookService myBookService;
 
-
-    /*
-    * 책 조회
-    * */
 
     // 책 전체 목록 조회
     @GetMapping("")
@@ -50,45 +49,13 @@ public class BookController {
     @GetMapping("/{bookId}")
     public ReadBookDetailResponse book(@PathVariable("bookId") String bookId) {
         Book book = bookService.findBookById(Long.parseLong(bookId));
-        MyBook myBook = bookService.findMyBookByUserBook(Long.parseLong(bookId));
+        MyBook myBook = myBookService.findMyBookByUserBook(Long.parseLong(bookId));
 
         return BookDetailMapper.entityToDTO(book, myBook);
     }
 
-    /*
-     * 독서 (MyBook)
-     * */
 
-    // 독서 시작 (MyBook 엔티티 생성)
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{bookId}/start")
-    public MyBookDTO createMyBook(@PathVariable("bookId") String bookId) {
-        MyBook myBook = bookService.createMyBook(Long.parseLong(bookId));
-        return MyBookMapper.entityToDTO(myBook);
-    }
-
-
-    // 독서 페이지 기록 (MyBook 엔티티의 lastReadPage 수정)
-    @PatchMapping("/{bookId}/read")
-    public ResponseEntity<Object> updateMyBook(
-            @PathVariable("bookId") String bookId,
-            @RequestBody @Valid UpdateMyBookRequest request
-    ) {
-        MyBook myBook = bookService.updateMyBook(Long.parseLong(bookId), request.getPage());
-        if (myBook != null) {
-            return new ResponseEntity<>(MyBookMapper.entityToDTO(myBook), HttpStatus.OK);
-        } else {
-            MessageResponse message = new MessageResponse("입력할 페이지의 수는 책의 마지막 페이지보다 작고, 마지막 읽었던 페이지보다 많아야 합니다.");
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
-    /*
-     * 찜
-     * */
-
-    // 찜하기 & 취소
+    // 책 찜하기 & 취소
     @PostMapping("/like")
     public ResponseEntity<Object> toggleBookLike(
             @RequestBody @Valid CreateBookLikeRequest request
