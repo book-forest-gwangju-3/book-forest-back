@@ -1,4 +1,4 @@
-package com.gwangju3.bookforest.resository;
+package com.gwangju3.bookforest.repository;
 
 import com.gwangju3.bookforest.domain.Tier;
 import jakarta.persistence.EntityManager;

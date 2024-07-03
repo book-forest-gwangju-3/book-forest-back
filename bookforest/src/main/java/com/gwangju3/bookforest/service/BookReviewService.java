@@ -7,6 +7,8 @@ import com.gwangju3.bookforest.domain.like.BookReviewLike;
 import com.gwangju3.bookforest.dto.CustomUserDetails;
 import com.gwangju3.bookforest.dto.UpdateBookReviewRequest;
 import com.gwangju3.bookforest.dto.bookreview.CreateBookReviewRequest;
+import com.gwangju3.bookforest.exception.global.UnauthorizedDeletionException;
+import com.gwangju3.bookforest.exception.global.UnauthorizedModificationException;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
 import com.gwangju3.bookforest.repository.LikeRepository;
@@ -48,9 +50,7 @@ public class BookReviewService {
 
         Book book = bookRepository.findBookById(bookId);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
+        String username = UserUtil.extractUsername();
 
         User writer = userRepository.findByUsername(username).get(0);
 
@@ -70,7 +70,14 @@ public class BookReviewService {
 
         BookReview bookReview = bookReviewRepository.findBookReviewById(bookReviewId);
 
-        bookReview.update(title, content);
+        String currentUsername = UserUtil.extractUsername();
+        String writerUsername = bookReview.getUser().getUsername();
+
+        if (currentUsername.equals(writerUsername)) {
+            bookReview.update(title, content);
+        } else {
+            throw new UnauthorizedModificationException();
+        }
     }
 
     @Transactional
@@ -83,6 +90,8 @@ public class BookReviewService {
         if (currentUsername.equals(writerUsername)) {
             bookReviewRepository.delete(bookReview);
             tierService.subtractTierEXP(userRepository.findByUsername(currentUsername).get(0), 200);
+        } else {
+            throw new UnauthorizedDeletionException();
         }
     }
 

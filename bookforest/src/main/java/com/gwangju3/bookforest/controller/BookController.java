@@ -5,6 +5,7 @@ import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.QuickReview;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
+import com.gwangju3.bookforest.exception.book.InvalidPageException;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
@@ -50,8 +51,8 @@ public class BookController {
     @GetMapping("/{bookId}")
     public ReadBookDetailResponse book(@PathVariable("bookId") String bookId) {
         Book book = bookService.findBookById(Long.parseLong(bookId));
-        MyBook myBook = bookService.findMyBookByUserBook(Long.parseLong(bookId));
-
+        List<MyBook> myBookList = bookService.findMyBookByUserBook(Long.parseLong(bookId));
+        MyBook myBook = (myBookList.isEmpty()) ? null : myBookList.get(0);
         return BookDetailMapper.entityToDTO(book, myBook);
     }
 
@@ -76,12 +77,7 @@ public class BookController {
             @RequestBody @Valid UpdateMyBookRequest request
     ) {
         MyBook myBook = bookService.updateMyBook(Long.parseLong(bookId), request.getPage());
-        if (myBook != null) {
-            return new ResponseEntity<>(MyBookMapper.entityToDTO(myBook), HttpStatus.OK);
-        } else {
-            MessageResponse message = new MessageResponse("입력할 페이지의 수는 책의 마지막 페이지보다 작고, 마지막 읽었던 페이지보다 많아야 합니다.");
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(MyBookMapper.entityToDTO(myBook), HttpStatus.OK);
     }
 
 
@@ -108,13 +104,7 @@ public class BookController {
             @RequestBody @Valid UpdateQuickReviewRequest request
     ) {
         QuickReview quickReview = bookService.updateQuickReview(request);
-
-        if (quickReview != null) {
-            return new ResponseEntity<>(QuickReviewMapper.entityToDTO(quickReview), HttpStatus.OK);
-        } else {
-            MessageResponse message = new MessageResponse("작성자만 수정이 가능합니다.");
-            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
-        }
+        return new ResponseEntity<>(QuickReviewMapper.entityToDTO(quickReview), HttpStatus.OK);
     }
 
 
@@ -123,15 +113,10 @@ public class BookController {
     public ResponseEntity<Object> deleteQuickReview(
             @RequestBody @Valid DeleteQuickReviewRequest request
     ) {
-        Boolean didDelete = bookService.deleteQuickReview(request);
-
-        if (didDelete) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            MessageResponse message = new MessageResponse("작성자만 삭제가 가능합니다.");
-            return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
-        }
+        bookService.deleteQuickReview(request);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
 
 
@@ -146,5 +131,12 @@ public class BookController {
     ) {
         boolean didCreate = bookService.toggleBookLike(request);
         return (didCreate) ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @ExceptionHandler(InvalidPageException.class)
+    public ResponseEntity<MessageResponse> handleInvalidPageException(InvalidPageException e) {
+        MessageResponse messageResponse = new MessageResponse(e.getMessage());
+        return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -2,7 +2,7 @@ package com.gwangju3.bookforest.service;
 
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.domain.commit.Commit;
-import com.gwangju3.bookforest.resository.TierRepository;
+import com.gwangju3.bookforest.repository.TierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

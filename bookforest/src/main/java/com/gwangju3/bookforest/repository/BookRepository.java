@@ -72,7 +72,6 @@ public class BookRepository {
 
     // id로 고치기
     public List<MyBook> findMyBookByUserBook(String username, Long bookId) {
-        if (username == null) return null;
         return em.createQuery(
                         "select m from MyBook m"
                                 + " where m.user.username = :username"

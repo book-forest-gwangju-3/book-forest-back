@@ -9,6 +9,9 @@ import com.gwangju3.bookforest.dto.book.CreateBookLikeRequest;
 import com.gwangju3.bookforest.dto.book.CreateQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.DeleteQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.UpdateQuickReviewRequest;
+import com.gwangju3.bookforest.exception.book.InvalidPageException;
+import com.gwangju3.bookforest.exception.global.UnauthorizedDeletionException;
+import com.gwangju3.bookforest.exception.global.UnauthorizedModificationException;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
 import com.gwangju3.bookforest.util.UserUtil;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 @Service
@@ -37,14 +41,9 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public MyBook findMyBookByUserBook(Long bookId) {
+    public List<MyBook> findMyBookByUserBook(Long bookId) {
         List<MyBook> myBookList = bookRepository.findMyBookByUserBook(UserUtil.extractUsername(), bookId);
-        // 비로그인 상태 || 유저가 독서한 적 없는 책일 때
-        if (myBookList == null || (myBookList.isEmpty())) {
-            return null;
-        } else {
-            return myBookList.get(0);
-        }
+        return myBookList;
     }
 
     @Transactional(readOnly = true)
@@ -81,7 +80,7 @@ public class BookService {
             commitService.createReadCommit(readPage, mybook);
             return mybook;
         } else {
-            return null;
+            throw new InvalidPageException();
         }
     }
 
@@ -108,11 +107,11 @@ public class BookService {
             quickReview.setContent(request.getContent());
             return quickReview;
         } else {
-            return null;
+            throw new UnauthorizedModificationException();
         }
     }
 
-    public Boolean deleteQuickReview(DeleteQuickReviewRequest request) {
+    public void deleteQuickReview(DeleteQuickReviewRequest request) {
         QuickReview quickReview = bookRepository.findQuickReviewById(request.getQuickReviewId());
 
         String username = UserUtil.extractUsername();
@@ -120,9 +119,8 @@ public class BookService {
 
         if (quickReview.getUser().getId().equals(user.getId())) {
             bookRepository.deleteQuickReview(quickReview);
-            return true;
         } else {
-            return false;
+            throw new UnauthorizedDeletionException();
         }
     }
 

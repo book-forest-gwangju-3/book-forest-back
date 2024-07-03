@@ -3,6 +3,9 @@ package com.gwangju3.bookforest.service;
 import com.gwangju3.bookforest.domain.Tier;
 import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.CreateUserRequest;
+import com.gwangju3.bookforest.exception.user.NicknameExistException;
+import com.gwangju3.bookforest.exception.user.PasswordLengthNotEnoughException;
+import com.gwangju3.bookforest.exception.user.UsernameExistException;
 import com.gwangju3.bookforest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,11 +28,18 @@ public class SignUpService {
         String nickname = request.getNickname();
         Tier tier = new Tier();
 
-        User user = new User(username, bCryptPasswordEncoder.encode(password), nickname, tier);
+        validatePassword(password);
 
+        User user = new User(username, bCryptPasswordEncoder.encode(password), nickname, tier);
         validateDuplicateUser(user);
 
         userRepository.save(user);
+    }
+
+    private void validatePassword(String password) {
+        if (password.length() < 8) {
+            throw new PasswordLengthNotEnoughException();
+        }
     }
 
     private void validateDuplicateUser(User user) {
@@ -40,14 +50,14 @@ public class SignUpService {
     private void validateUsername(User user) {
         List<User> duplicateUsername = userRepository.findByUsername(user.getUsername());
         if (!duplicateUsername.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+            throw new UsernameExistException();
         }
     }
 
     private void validateNickname(User user) {
         List<User> duplicateNickname = userRepository.findByNickname(user.getNickname());
         if (!duplicateNickname.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
+            throw new NicknameExistException();
         }
     }
 

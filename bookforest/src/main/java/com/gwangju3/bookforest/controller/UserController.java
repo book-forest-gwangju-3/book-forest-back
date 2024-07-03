@@ -10,6 +10,9 @@ import com.gwangju3.bookforest.dto.book.ReadBookListResponse;
 import com.gwangju3.bookforest.dto.user.UserDTO;
 import com.gwangju3.bookforest.dto.user.UserRankingDTO;
 import com.gwangju3.bookforest.dto.user.UserTierDTO;
+import com.gwangju3.bookforest.exception.user.NicknameExistException;
+import com.gwangju3.bookforest.exception.user.PasswordLengthNotEnoughException;
+import com.gwangju3.bookforest.exception.user.UsernameExistException;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.mapper.UserMapper;
 import com.gwangju3.bookforest.mapper.UserRankingMapper;
@@ -108,4 +111,21 @@ public class UserController {
         }
     }
 
+    @ExceptionHandler(UsernameExistException.class)
+    public ResponseEntity<MessageResponse> handleUsernameExistException(UsernameExistException ex) {
+        String message = ex.getMessage();
+        return new ResponseEntity<>(new MessageResponse(message), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NicknameExistException.class)
+    public ResponseEntity<MessageResponse> handleNicknameExistException(NicknameExistException ex) {
+        String message = ex.getMessage();
+        return new ResponseEntity<>(new MessageResponse(message), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordLengthNotEnoughException.class)
+    public ResponseEntity<MessageResponse> handlePasswordLengthNotEnoughException(PasswordLengthNotEnoughException ex) {
+        String message = ex.getMessage();
+        return new ResponseEntity<>(new MessageResponse(message), HttpStatus.BAD_REQUEST);
+    }
 }
