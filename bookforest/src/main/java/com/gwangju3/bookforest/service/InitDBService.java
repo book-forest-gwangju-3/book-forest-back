@@ -20,9 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiPredicate;
 
 @Service
 @Transactional
@@ -37,7 +35,7 @@ public class InitDBService {
     private final BookRepository bookRepository;
 
 
-    public List<Book> saveBestSeller(InitDBRequest request) throws IOException, URISyntaxException {
+    public int[] saveBestSeller(InitDBRequest request) throws IOException, URISyntaxException {
 
         // DB에 저장된 책들의 베스트셀러 순위를 무효처리
         List<Book> allBook = bookRepository.searchBook("");
@@ -47,7 +45,9 @@ public class InitDBService {
 
         int requestPage = request.getPage();
         int itemsPerPage = request.getItemsPerPage();
-        List<Book> bestSellerList = new ArrayList<>();
+
+        int saveCount = 0;
+        int editCount = 0;
 
         for (int i = 1; i <= requestPage; i++) {
             JSONArray bestSellerJsonArr = mapURIString("Bestseller", itemsPerPage, i, false, ALADIN_API_KEY);
@@ -62,30 +62,25 @@ public class InitDBService {
                 if (bookRepository.findBookById(id) != null) {
                     Book book = bookRepository.findBookById(id);
                     book.setBestRank(bestRank);
-                    if (bestSellerList.size() < 50) {
-                        bestSellerList.add(book);
-                    }
+                    editCount++;
                     continue;
                 }
 
                 Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 book.setBestRank(bestRank);
                 initDBRepository.saveBook(book);
-
-                if (bestSellerList.size() < 50) {
-                    bestSellerList.add(book);
-                }
+                saveCount++;
             }
         }
 
-        return bestSellerList;
+        return new int[]{saveCount, editCount};
     }
 
 
-    public List<Book> saveNewAll(InitDBRequest request) throws IOException, URISyntaxException {
+    public int saveNewAll(InitDBRequest request) throws IOException, URISyntaxException {
         int requestPage = request.getPage();
         int itemsPerPage = request.getItemsPerPage();
-        List<Book> newBookList = new ArrayList<>();
+        int saveCount = 0;
 
         for (int i = 1; i <= requestPage; i++) {
             JSONArray newBookJsonArr = mapURIString("ItemNewAll", itemsPerPage, i, false, ALADIN_API_KEY);
@@ -97,29 +92,23 @@ public class InitDBService {
 
                 if (bookRepository.findBookById(id) != null) {
                     Book book = bookRepository.findBookById(id);
-                    if (newBookList.size() < 50) {
-                        newBookList.add(book);
-                    }
                     continue;
                 }
 
                 Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
-
-                if (newBookList.size() < 50) {
-                    newBookList.add(book);
-                }
+                saveCount++;
             }
         }
 
-        return newBookList;
+        return saveCount;
     }
 
 
-    public List<Book> saveNewSpecial(InitDBRequest request) throws IOException, URISyntaxException {
+    public int saveNewSpecial(InitDBRequest request) throws IOException, URISyntaxException {
         int requestPage = request.getPage();
         int itemsPerPage = request.getItemsPerPage();
-        List<Book> newBookList = new ArrayList<>();
+        int saveCount = 0;
 
         for (int i = 1; i <= requestPage; i++) {
             JSONArray newSpecialJsonArr = mapURIString("ItemNewSpecial", itemsPerPage, i, false, ALADIN_API_KEY);
@@ -131,29 +120,24 @@ public class InitDBService {
 
                 if (bookRepository.findBookById(id) != null) {
                     Book book = bookRepository.findBookById(id);
-                    if (newBookList.size() < 50) {
-                        newBookList.add(book);
-                    }
                     continue;
                 }
 
                 Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
 
-                if (newBookList.size() < 50) {
-                    newBookList.add(book);
-                }
+                saveCount++;
             }
         }
 
-        return newBookList;
+        return saveCount;
     }
 
 
-    public List<Book> saveEditorChoice(InitDBRequest request) throws IOException, URISyntaxException {
+    public int saveEditorChoice(InitDBRequest request) throws IOException, URISyntaxException {
         int requestPage = request.getPage();
         int itemsPerPage = request.getItemsPerPage();
-        List<Book> newBookList = new ArrayList<>();
+        int saveCount = 0;
 
         for (int i = 1; i <= requestPage; i++) {
             JSONArray editorJsonArr = mapURIString("ItemEditorChoice", itemsPerPage, i, true, ALADIN_API_KEY);
@@ -165,22 +149,16 @@ public class InitDBService {
 
                 if (bookRepository.findBookById(id) != null) {
                     Book book = bookRepository.findBookById(id);
-                    if (newBookList.size() < 50) {
-                        newBookList.add(book);
-                    }
                     continue;
                 }
 
                 Book book = jsonObjToEntity(o, ALADIN_API_KEY);
                 initDBRepository.saveBook(book);
-
-                if (newBookList.size() < 50) {
-                    newBookList.add(book);
-                }
+                saveCount++;
             }
         }
 
-        return newBookList;
+        return saveCount;
     }
 
 
