@@ -61,7 +61,9 @@ public class BookRepository {
     public List<Book> findBookListByIds(List<Long> ids) {
         return em.createQuery(
                         "select b from Book b"
-                                + " where b.id in :ids", Book.class)
+                                + " where b.id in :ids"
+                                + " order by b.bestRank"
+                        , Book.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }

@@ -3,6 +3,7 @@ package com.gwangju3.bookforest.controller;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.AladinAPIRequest;
+import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.*;
 import com.gwangju3.bookforest.exception.book.InvalidPageException;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
@@ -48,8 +49,7 @@ public class BookController {
     @GetMapping("/{bookId}")
     public ReadBookDetailResponse book(@PathVariable("bookId") String bookId) {
         Book book = bookService.findBookById(Long.parseLong(bookId));
-        List<MyBook> myBookList = myBookService.findMyBookByUserBook(Long.parseLong(bookId));
-        MyBook myBook = (myBookList.isEmpty()) ? null : myBookList.get(0);
+        MyBook myBook = myBookService.findMyBookByUserBook(Long.parseLong(bookId));
         return BookDetailMapper.entityToDTO(book, myBook);
     }
 
