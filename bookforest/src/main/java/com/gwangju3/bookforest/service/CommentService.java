@@ -6,6 +6,8 @@ import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.domain.commit.Commit;
 import com.gwangju3.bookforest.dto.comment.CreateCommentRequest;
 import com.gwangju3.bookforest.dto.comment.UpdateCommentRequest;
+import com.gwangju3.bookforest.exception.global.UnauthorizedDeletionException;
+import com.gwangju3.bookforest.exception.global.UnauthorizedModificationException;
 import com.gwangju3.bookforest.repository.BookReviewRepository;
 import com.gwangju3.bookforest.repository.CommentRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
@@ -51,6 +53,8 @@ public class CommentService {
 
         if (currentUsername.equals(writerUsername)) {
             comment.updateContent(request.getContent());
+        } else {
+            throw new UnauthorizedModificationException();
         }
     }
 
@@ -64,6 +68,8 @@ public class CommentService {
         if (currentUsername.equals(writerUsername)) {
             commentRepository.delete(comment);
             tierService.subtractTierEXP(userRepository.findByUsername(currentUsername).get(0), 10);
+        } else {
+            throw new UnauthorizedDeletionException();
         }
     }
 }

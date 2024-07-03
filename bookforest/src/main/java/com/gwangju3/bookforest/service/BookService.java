@@ -5,6 +5,7 @@ import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.domain.like.BookLike;
 import com.gwangju3.bookforest.dto.AladinAPIRequest;
 import com.gwangju3.bookforest.dto.book.CreateBookLikeRequest;
+
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
 import com.gwangju3.bookforest.util.UserUtil;
@@ -15,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import static com.gwangju3.bookforest.util.APIUtil.*;
@@ -43,6 +46,7 @@ public class BookService {
     public List<Book> searchBook(String q) {
         return bookRepository.searchBook(q);
     }
+
 
     public boolean toggleBookLike(CreateBookLikeRequest request) {
         User user = userRepository.findByUsername(UserUtil.extractUsername()).get(0);

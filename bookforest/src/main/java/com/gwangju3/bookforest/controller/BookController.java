@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.AladinAPIRequest;
 import com.gwangju3.bookforest.dto.book.*;
+import com.gwangju3.bookforest.exception.book.InvalidPageException;
 import com.gwangju3.bookforest.mapper.BookDetailMapper;
 import com.gwangju3.bookforest.mapper.BookMapper;
 import com.gwangju3.bookforest.service.BookService;
@@ -47,8 +48,8 @@ public class BookController {
     @GetMapping("/{bookId}")
     public ReadBookDetailResponse book(@PathVariable("bookId") String bookId) {
         Book book = bookService.findBookById(Long.parseLong(bookId));
-        MyBook myBook = myBookService.findMyBookByUserBook(Long.parseLong(bookId));
-
+        List<MyBook> myBookList = myBookService.findMyBookByUserBook(Long.parseLong(bookId));
+        MyBook myBook = (myBookList.isEmpty()) ? null : myBookList.get(0);
         return BookDetailMapper.entityToDTO(book, myBook);
     }
 
@@ -80,6 +81,7 @@ public class BookController {
         return new ReadBookListResponse(items);
     }
 
+  
     @GetMapping("/new-all")
     public ReadBookListResponse saveNewAll(
             @RequestBody @Valid AladinAPIRequest request
@@ -111,5 +113,12 @@ public class BookController {
                 .map(BookMapper::entityToDTO)
                 .collect(Collectors.toList());
         return new ReadBookListResponse(items);
+    }
+
+
+    @ExceptionHandler(InvalidPageException.class)
+    public ResponseEntity<MessageResponse> handleInvalidPageException(InvalidPageException e) {
+        MessageResponse messageResponse = new MessageResponse(e.getMessage());
+        return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
     }
 }
