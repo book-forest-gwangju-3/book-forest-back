@@ -114,11 +114,4 @@ public class BookController {
                 .collect(Collectors.toList());
         return new ReadBookListResponse(items);
     }
-
-
-    @ExceptionHandler(InvalidPageException.class)
-    public ResponseEntity<MessageResponse> handleInvalidPageException(InvalidPageException e) {
-        MessageResponse messageResponse = new MessageResponse(e.getMessage());
-        return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-    }
 }
