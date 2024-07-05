@@ -71,9 +71,11 @@ public class BookController {
     * */
 
     @GetMapping("/best")
-    public ReadBookListResponse saveBestSeller(
-            @RequestBody @Valid AladinAPIRequest request
+    public ReadBookListResponse findBestSeller(
+            @RequestParam Integer page,
+            @RequestParam Integer item
     ) throws IOException, URISyntaxException {
+        AladinAPIRequest request = new AladinAPIRequest(page, item);
         List<Book> bestSellerList = bookService.findBestSeller(request);
         List<BookDTO> items = bestSellerList.stream()
                 .map(BookMapper::entityToDTO)
@@ -83,9 +85,11 @@ public class BookController {
 
   
     @GetMapping("/new-all")
-    public ReadBookListResponse saveNewAll(
-            @RequestBody @Valid AladinAPIRequest request
+    public ReadBookListResponse findNewAll(
+            @RequestParam Integer page,
+            @RequestParam Integer item
     ) throws IOException, URISyntaxException {
+        AladinAPIRequest request = new AladinAPIRequest(page, item);
         List<Book> bestSellerList = bookService.findNewAll(request);
         List<BookDTO> items = bestSellerList.stream()
                 .map(BookMapper::entityToDTO)
@@ -94,9 +98,11 @@ public class BookController {
     }
 
     @GetMapping("/new-special")
-    public ReadBookListResponse saveNewSpecial(
-            @RequestBody @Valid AladinAPIRequest request
+    public ReadBookListResponse findNewSpecial(
+            @RequestParam Integer page,
+            @RequestParam Integer item
     ) throws IOException, URISyntaxException {
+        AladinAPIRequest request = new AladinAPIRequest(page, item);
         List<Book> bestSellerList = bookService.findNewSpecial(request);
         List<BookDTO> items = bestSellerList.stream()
                 .map(BookMapper::entityToDTO)
@@ -105,9 +111,11 @@ public class BookController {
     }
 
     @GetMapping("/editor")
-    public ReadBookListResponse saveEditorChoice(
-            @RequestBody @Valid AladinAPIRequest request
+    public ReadBookListResponse findEditorChoice(
+            @RequestParam Integer page,
+            @RequestParam Integer item
     ) throws IOException, URISyntaxException {
+        AladinAPIRequest request = new AladinAPIRequest(page, item);
         List<Book> bestSellerList = bookService.findEditorChoice(request);
         List<BookDTO> items = bestSellerList.stream()
                 .map(BookMapper::entityToDTO)
