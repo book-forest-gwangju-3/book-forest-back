@@ -4,6 +4,7 @@ import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.dto.MessageResponse;
 import com.gwangju3.bookforest.dto.book.MyBookDTO;
 import com.gwangju3.bookforest.dto.book.UpdateMyBookRequest;
+import com.gwangju3.bookforest.exception.book.InvalidPageException;
 import com.gwangju3.bookforest.mapper.MyBookMapper;
 import com.gwangju3.bookforest.service.MyBookService;
 import jakarta.validation.Valid;
@@ -41,5 +42,11 @@ public class MyBookController {
             MessageResponse message = new MessageResponse("입력할 페이지의 수는 책의 마지막 페이지보다 작고, 마지막 읽었던 페이지보다 많아야 합니다.");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ExceptionHandler(InvalidPageException.class)
+    public ResponseEntity<MessageResponse> handleInvalidPageException(InvalidPageException e) {
+        MessageResponse messageResponse = new MessageResponse(e.getMessage());
+        return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
     }
 }
