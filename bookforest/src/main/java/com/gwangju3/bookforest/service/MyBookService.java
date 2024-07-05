@@ -3,6 +3,7 @@ package com.gwangju3.bookforest.service;
 import com.gwangju3.bookforest.domain.Book;
 import com.gwangju3.bookforest.domain.MyBook;
 import com.gwangju3.bookforest.domain.User;
+import com.gwangju3.bookforest.exception.book.InvalidPageException;
 import com.gwangju3.bookforest.repository.MyBookRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
 import com.gwangju3.bookforest.util.UserUtil;
@@ -65,7 +66,7 @@ public class MyBookService {
             commitService.createReadCommit(readPage, mybook);
             return mybook;
         } else {
-            return null;
+            throw new InvalidPageException();
         }
     }
 }
