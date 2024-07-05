@@ -30,7 +30,7 @@ public class MyBook {
 
     private Boolean readCompleted;
 
-    @OneToMany(mappedBy = "myBook", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "myBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReadCommit> readCommit = new ArrayList<>();
 
     protected MyBook() { }

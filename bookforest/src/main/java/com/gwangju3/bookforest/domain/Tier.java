@@ -24,7 +24,7 @@ public class Tier {
     @Column(name = "tier_id")
     private Long id;
 
-    @OneToOne(mappedBy = "tier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "tier", fetch = FetchType.LAZY)
     private User user;
 
     @Enumerated(EnumType.STRING)
