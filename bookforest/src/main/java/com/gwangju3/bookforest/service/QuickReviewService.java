@@ -6,6 +6,8 @@ import com.gwangju3.bookforest.domain.User;
 import com.gwangju3.bookforest.dto.book.CreateQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.DeleteQuickReviewRequest;
 import com.gwangju3.bookforest.dto.book.UpdateQuickReviewRequest;
+import com.gwangju3.bookforest.exception.global.UnauthorizedDeletionException;
+import com.gwangju3.bookforest.exception.global.UnauthorizedModificationException;
 import com.gwangju3.bookforest.repository.BookRepository;
 import com.gwangju3.bookforest.repository.QuickReviewRepository;
 import com.gwangju3.bookforest.repository.UserRepository;
@@ -46,7 +48,7 @@ public class QuickReviewService {
             quickReview.setContent(request.getContent());
             return quickReview;
         } else {
-            return null;
+            throw new UnauthorizedModificationException();
         }
     }
 
@@ -60,7 +62,7 @@ public class QuickReviewService {
             quickReviewRepository.deleteQuickReview(quickReview);
             return true;
         } else {
-            return false;
+            throw new UnauthorizedDeletionException();
         }
     }
 }

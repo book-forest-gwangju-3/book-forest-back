@@ -50,7 +50,6 @@ public class CommitService {
 
         commitRepository.save(commit);
         tierService.addTierEXP(user, commit);
-
     }
 
     public void createCommentCommit(Comment comment) {
@@ -61,7 +60,5 @@ public class CommitService {
 
         commitRepository.save(commit);
         tierService.addTierEXP(user, commit);
-
-
     }
 }
