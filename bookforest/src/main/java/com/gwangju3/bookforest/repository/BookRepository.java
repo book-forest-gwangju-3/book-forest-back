@@ -67,4 +67,9 @@ public class BookRepository {
                 .setParameter("ids", ids)
                 .getResultList();
     }
+
+    public void clearBestRank() {
+        em.createQuery("update Book b set b.bestRank = null")
+                .executeUpdate();
+    }
 }

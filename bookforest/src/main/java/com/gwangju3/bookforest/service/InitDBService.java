@@ -33,11 +33,8 @@ public class InitDBService {
 
     public int[] saveBestSeller(AladinAPIRequest request) throws IOException, URISyntaxException {
 
-        // DB에 저장된 책들의 베스트셀러 순위를 무효처리
-        List<Book> allBook = bookRepository.searchBook("");
-        for (Book book : allBook) {
-            book.setBestRank(null);
-        }
+        // DB에 저장된 모든 책들의 베스트셀러 순위를 무효처리 (새로운 순위를 받아와야 하므로)
+        bookRepository.clearBestRank();
 
         int requestPage = request.getPage();
         int itemsPerPage = request.getItemsPerPage();
